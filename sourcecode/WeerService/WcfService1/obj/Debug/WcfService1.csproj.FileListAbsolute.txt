@@ -17,3 +17,22 @@ d:\documents\visual studio 2015\Projects\WcfService1\WcfService1\bin\Microsoft.A
 d:\documents\visual studio 2015\Projects\WcfService1\WcfService1\obj\Debug\WcfService1.csprojResolveAssemblyReference.cache
 d:\documents\visual studio 2015\Projects\WcfService1\WcfService1\obj\Debug\WcfService1.dll
 d:\documents\visual studio 2015\Projects\WcfService1\WcfService1\obj\Debug\WcfService1.pdb
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\ApplicationInsights.config
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\WcfService1.dll.config
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\WcfService1.dll
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\WcfService1.pdb
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.AI.Web.dll
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.ApplicationInsights.dll
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.AI.Web.xml
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\bin\Microsoft.ApplicationInsights.xml
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\obj\Debug\WcfService1.csprojResolveAssemblyReference.cache
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\obj\Debug\WcfService1.dll
+C:\Users\Jef Clissen\OneDrive\Documenten\School\Uber-ijsco-app\sourcecode\WeerService\WcfService1\obj\Debug\WcfService1.pdb

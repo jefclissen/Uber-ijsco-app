@@ -8,6 +8,7 @@ namespace WcfService1
     public class Weerbericht
     {
         public string Description { get; set; }
-        public int Temperature { get; set; }
+        public int Temperature { get; set; }
+
     }
 }

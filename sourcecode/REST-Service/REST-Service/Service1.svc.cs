@@ -19,11 +19,8 @@ namespace REST_Service
             aList.Add(new Location() { Longitude = 5.111111, Latitude = 43.111111});
             aList.Add(new Location() { Longitude = 5.222222, Latitude = 43.222222 });
 
-            List<Location> sendList = new List<Location>();
-            for (int i = 0; i < int.Parse(id); i++)
-            {
-                sendList.Add(aList[i]); 
-            }
+            List<Location> sendList = new List<Location>();           
+            sendList.Add(aList[int.Parse(id)]); 
             return sendList;
         }
     }

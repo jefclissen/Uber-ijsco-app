@@ -17,7 +17,11 @@ namespace REST_Service
             BodyStyle = WebMessageBodyStyle.Bare,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        List<Location> locations(string id);
+        List<Location> locations(string id);        [OperationContract]
+        [WebInvoke(Method = "*", UriTemplate = "save", BodyStyle =
+        WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat =
+        WebMessageFormat.Json)]
+        Location Save(Location bericht);
     }
 
 

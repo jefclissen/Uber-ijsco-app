@@ -1,10 +1,15 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Diagnostics;
+using System.Threading.Tasks;
+//using FluentAssertions;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace REST_Service
 {
@@ -12,6 +17,9 @@ namespace REST_Service
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class Service1 : IService1
     {
+        protected static IMongoClient _client = new MongoClient("mongodb://uber-ijscoapp:EejDABqPFOpMdYu7wSvsVMQF0vaWp8G12R8AROUbwwr0GGOA0Xa01bSuYLJQswJEtzuA6hCxFGMpONit6dwbzA==@uber-ijscoapp.documents.azure.com:10250/?ssl=true");
+        protected static IMongoDatabase _database = _client.GetDatabase("uber-ijscoapp");
+
         public List<Location> locations(string id)
         {
             /*Simulate database*/
@@ -22,6 +30,31 @@ namespace REST_Service
             List<Location> sendList = new List<Location>();           
             sendList.Add(aList[int.Parse(id)]); 
             return sendList;
+            
+        }        public Location Save(Location bericht)
+        {
+            if (WebOperationContext.Current.IncomingRequest.Method == "POST")
+            {
+                _database.DropCollection("UberCollection");
+                WriteToDb();
+                ReadDb();
+            }
+            return null;
+        }        public async void WriteToDb()
+        {
+            var document = new BsonDocument
+                {
+                    { "_id", "1996" },
+                    { "name", "Jef" }
+                };
+            var collection = _database.GetCollection<BsonDocument>("UberCollection");
+            await collection.InsertOneAsync(document);
+        }        public async void ReadDb()
+        {
+            var collection = _database.GetCollection<BsonDocument>("UberCollection");
+            var filter = Builders<BsonDocument>.Filter.Eq("name", "Jef");
+            var result = await collection.Find().ToListAsync();
+            Debug.WriteLine(result);
         }
     }
 }

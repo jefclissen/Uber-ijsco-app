@@ -1,0 +1,24 @@
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\Deliverer app.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\Deliverer.Core.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\Java.Interop.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\Mono.Android.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\mscorlib.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Core.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Xml.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Xml.Linq.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Runtime.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.ComponentModel.Composition.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Resources.ResourceManager.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Collections.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Diagnostics.Debug.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Threading.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Collections.Concurrent.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Reflection.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Linq.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Runtime.InteropServices.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Runtime.Extensions.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Reflection.Extensions.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Net.Http.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.Runtime.Serialization.dll
+C:\Users\Robbe\Google Drive\school 2016-2017\Cloud Applications\Uber-ijsco-app\sourcecode\deliverer-app\Deliverer app\obj\Debug\android\assets\System.ServiceModel.Internals.dll

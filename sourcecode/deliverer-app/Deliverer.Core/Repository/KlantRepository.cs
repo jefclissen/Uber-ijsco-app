@@ -14,18 +14,27 @@ namespace Deliverer.Core.Repository
             new Klant()
             {
                 Naam="Robbe",
-                Locatie="51.228643, 4.415705"
+                Longitude = 51.228643,
+                Latitude = 4.415705                
             },
             new Klant()
             {
                 Naam="Jef",
-                Locatie="51.229772, 4.413956"
+                Longitude = 51.229772,
+                Latitude = 4.413956
             },
             new Klant()
             {
                 Naam="Pim",
-                Locatie="51.229137, 4.413205"
+                Longitude = 51.229137,
+                Latitude = 4.413205
             }
         };
+
+        public List<Klant> GeefAlleKlaten()
+        {
+            return klanten;
+
+        }
     }
 }

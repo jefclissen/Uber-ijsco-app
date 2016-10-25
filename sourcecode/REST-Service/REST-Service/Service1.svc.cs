@@ -19,7 +19,6 @@ namespace REST_Service
     {
         protected static IMongoClient _client = new MongoClient("mongodb://uber-ijscoapp:EejDABqPFOpMdYu7wSvsVMQF0vaWp8G12R8AROUbwwr0GGOA0Xa01bSuYLJQswJEtzuA6hCxFGMpONit6dwbzA==@uber-ijscoapp.documents.azure.com:10250/?ssl=true");
         protected static IMongoDatabase _database = _client.GetDatabase("uber-ijscoapp");
-
         public List<Location> locations(string id)
         {
             /*Simulate database*/
@@ -35,8 +34,9 @@ namespace REST_Service
         {
             if (WebOperationContext.Current.IncomingRequest.Method == "POST")
             {
-                _database.DropCollection("UberCollection");
-                WriteToDb();
+                
+                //_database.DropCollection("UberCollection");
+                //WriteToDb();
                 ReadDb();
             }
             return null;
@@ -53,8 +53,11 @@ namespace REST_Service
         {
             var collection = _database.GetCollection<BsonDocument>("UberCollection");
             var filter = Builders<BsonDocument>.Filter.Eq("name", "Jef");
-            var result = await collection.Find().ToListAsync();
-            Debug.WriteLine(result);
+            var result = await collection.Find(filter).ToListAsync();
+            foreach (var dox in result)
+            {
+                Debug.WriteLine(dox);
+            }
         }
     }
 }

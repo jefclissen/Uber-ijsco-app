@@ -355,6 +355,9 @@ namespace googlemaps
 			// aapt resource value: 0x7f07000d
 			public const int map = 2131165197;
 			
+			// aapt resource value: 0x7f07000e
+			public const int mapButton = 2131165198;
+			
 			// aapt resource value: 0x7f070001
 			public const int none = 2131165185;
 			
@@ -406,7 +409,10 @@ namespace googlemaps
 			public const int Main = 2130903040;
 			
 			// aapt resource value: 0x7f030001
-			public const int MapView = 2130903041;
+			public const int MainMenuLayout = 2130903041;
+			
+			// aapt resource value: 0x7f030002
+			public const int MapView = 2130903042;
 			
 			static Layout()
 			{

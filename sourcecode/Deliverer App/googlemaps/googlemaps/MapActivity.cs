@@ -16,7 +16,7 @@ using Deliverer.Core.Modle;
 
 namespace googlemaps
 {
-    [Activity(Label = "googlemaps", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "googlemaps", Icon = "@drawable/icon")]
     public class MapActivity : Activity
     {
         private List<Klant> klanten;

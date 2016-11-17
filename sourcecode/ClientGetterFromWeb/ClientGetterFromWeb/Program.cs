@@ -17,12 +17,18 @@ namespace Examples.System.Net
             public double Longitude { get; set; }
             public double Latitude { get; set; }
         }
+
+        public class Client
+        {
+            public Location currentLocation;
+            public string name { get; set; }
+        }
         
         public static void Main()
         {
             // Create a request for the URL. 
             WebRequest request = WebRequest.Create(
-              "http://uber-ijscoapp.azurewebsites.net/Service1.svc/location/2");
+              "http://localhost:3000/data");
 
             // If required by the server, set the credentials.
             request.Credentials = CredentialCache.DefaultCredentials;
@@ -42,10 +48,15 @@ namespace Examples.System.Net
             string responseFromServer = reader.ReadToEnd();
 
             // Display the content + deserialize json to location object
-            Console.WriteLine(responseFromServer);
-            List<Location> l = new List<Location>();
-            l = JsonConvert.DeserializeObject<List<Location>>(responseFromServer);
-            Console.WriteLine(l[0].Longitude + "  " + l[1].Latitude);
+            //Console.WriteLine(responseFromServer);
+            List<Client> clientList = new List<Client>();
+            clientList = JsonConvert.DeserializeObject<List<Client>>(responseFromServer);
+            //Console.WriteLine(clientList);
+            for (int i = 0; i < clientList.Count; i++)
+            {
+                Console.WriteLine("ik ben " + clientList[i].name + " mijn longitude is: " + clientList[i].currentLocation.Longitude + " mijn latitude: " + clientList[i].currentLocation.Latitude);
+
+            }
 
             // Clean up the streams and the response.
             reader.Close();

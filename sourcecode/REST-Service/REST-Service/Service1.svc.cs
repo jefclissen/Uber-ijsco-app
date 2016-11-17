@@ -35,8 +35,8 @@ namespace REST_Service
             if (WebOperationContext.Current.IncomingRequest.Method == "POST")
             {
                 
-                //_database.DropCollection("UberCollection");
-                //WriteToDb();
+                _database.DropCollection("UberCollection");
+                WriteToDb();
                 ReadDb();
             }
             return null;

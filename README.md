@@ -18,6 +18,7 @@ Op de app van de klant komt ook te staan hoelnag het nog duurd eer de ijskar er 
     * Locatie logging  
 
 * Azure voor online server (compatibiliteit met Xamarin is optimaal aangezien deze beide van microsoft zijn)
+* Veranderd naar Node server (bij het beseffen dat onze gratis krediet van Azure op was)
   * Google Maps API
     * bereken snelste routes naar clients 
   * database, opslaan van:

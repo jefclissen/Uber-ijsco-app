@@ -105,6 +105,12 @@
       <Version>29.0.0.2</Version>
     </XamarinComponentReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Deliverer.Core\Deliverer.Core.csproj">
+      <Project>{C0ACAE30-05F1-48EC-BD19-E2CF606701DA}</Project>
+      <Name>Deliverer.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Basement.29.0.0.2\build\Xamarin.GooglePlayServices.Basement.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Basement.29.0.0.2\build\Xamarin.GooglePlayServices.Basement.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

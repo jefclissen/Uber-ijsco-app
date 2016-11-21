@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    h1.
+        User List
+    ul
+        each user, i in userlist
+            li
+                a = user.username
+                b = user.userlat
+                c = user.userlong

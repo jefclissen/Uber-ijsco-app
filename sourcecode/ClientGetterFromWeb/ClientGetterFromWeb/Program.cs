@@ -12,23 +12,37 @@ namespace Examples.System.Net
 {
     public class WebRequestGetExample
     {
-        public class Location
-        {
-            public double Longitude { get; set; }
-            public double Latitude { get; set; }
-        }
-
         public class Client
         {
-            public Location currentLocation;
-            public string name { get; set; }
+            public string _id { get; set; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
+            public string Naam { get; set; }
         }
         
         public static void Main()
         {
+            /*Console.WriteLine("POST");
+            Console.Write("Username");
+            string username = Console.ReadLine();
+            Console.Write("Latitude");
+            string latitude = Console.ReadLine();
+            Console.Write("Longitude");
+            string longitude = Console.ReadLine();
+            post(username, latitude, longitude);*/
+            Console.WriteLine("GET");
+            get();
+        }
+
+        public static void post(string n, string lat, string longi)
+        {
+
+        }
+        public static void get()
+        {
             // Create a request for the URL. 
             WebRequest request = WebRequest.Create(
-              "http://localhost:3000/data");
+              "http://localhost:3000/userlist");
 
             // If required by the server, set the credentials.
             request.Credentials = CredentialCache.DefaultCredentials;
@@ -37,7 +51,7 @@ namespace Examples.System.Net
             WebResponse response = request.GetResponse();
 
             // Display the status.
-            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+            //Console.WriteLine(((HttpWebResponse)response).StatusDescription);
 
             // Get the stream containing content returned by the server.
             Stream dataStream = response.GetResponseStream();
@@ -54,7 +68,7 @@ namespace Examples.System.Net
             //Console.WriteLine(clientList);
             for (int i = 0; i < clientList.Count; i++)
             {
-                Console.WriteLine("ik ben " + clientList[i].name + " mijn longitude is: " + clientList[i].currentLocation.Longitude + " mijn latitude: " + clientList[i].currentLocation.Latitude);
+                Console.WriteLine(clientList[i].Naam+" lat: "+clientList[i].Latitude+", long: "+clientList[i].Longitude);
 
             }
 

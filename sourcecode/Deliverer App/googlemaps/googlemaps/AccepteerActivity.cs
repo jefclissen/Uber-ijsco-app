@@ -69,6 +69,7 @@ namespace googlemaps
         {
             KlantDataService dataService = new KlantDataService();
             klanten = dataService.GeefAlleKlanten();
+            klanten = dataService.GeefAlleKlanten();
 
             List<string> naamKlanten = new List<string>();
 

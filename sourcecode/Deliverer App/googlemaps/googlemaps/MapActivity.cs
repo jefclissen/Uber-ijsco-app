@@ -57,13 +57,27 @@ namespace googlemaps
             GoogleMap map = mapFrag.Map;
             if (map != null)
             {
-                for (int i = 0; i < klanten.Count; i++)
+                for (int i = 0; i < locaties.Length; i++)
                 {
                     map.AddMarker(locaties[i]);
                 }
-                //map.MoveCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(locaties[0].Position.Latitude, locaties[0].Position.Longitude), 15));
-                //map.AnimateCamera(CameraUpdateFactory.ZoomTo(15), 2000, null);
+
+                if(locaties == null || locaties.Length ==0)
+                {
+                    MarkerOptions marker = new MarkerOptions();
+                    marker.SetPosition(new LatLng(51.218999, 4.401556));
+                    zoomToLocation(marker, map, 20);
+                }
+                else
+                {
+                    zoomToLocation(locaties[0], map, 7);
+                }
             }
+        }
+        private void zoomToLocation(MarkerOptions locatie, GoogleMap map, int zoom)
+        {
+            map.MoveCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(locatie.Position.Latitude, locatie.Position.Longitude), zoom));
+            map.AnimateCamera(CameraUpdateFactory.ZoomTo(zoom), 2000, null);
         }
     }
 }

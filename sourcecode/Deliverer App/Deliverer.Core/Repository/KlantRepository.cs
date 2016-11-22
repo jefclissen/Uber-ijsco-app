@@ -28,8 +28,6 @@ namespace Deliverer.Core.Repository
             // Get the response.
             WebResponse response = await request.GetResponseAsync();
 
-            // Display the status.
-
             // Get the stream containing content returned by the server.
             Stream dataStream = response.GetResponseStream();
 

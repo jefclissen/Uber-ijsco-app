@@ -8,6 +8,10 @@ namespace Deliverer.Core.Modle
 {
     public class Klant
     {
+        public string _id
+        {
+            get;set;
+        }
         public string Naam
         {
             get;set;

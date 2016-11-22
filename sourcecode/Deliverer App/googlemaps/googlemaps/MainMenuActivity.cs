@@ -16,6 +16,7 @@ namespace googlemaps
     public class MainMenuActivity : Activity
     {
         private Button mapButton;
+        private Button aanvraagButton;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -28,11 +29,19 @@ namespace googlemaps
         private void FindViews()
         {
             mapButton = FindViewById<Button>(Resource.Id.mapButton);
+            aanvraagButton = FindViewById<Button>(Resource.Id.aanvragenButton);
         }
 
         private void HandleEvents()
         {
             mapButton.Click += MapButton_Click;
+            aanvraagButton.Click += AanvraagButton_Click;
+        }
+
+        private void AanvraagButton_Click(object sender, EventArgs e)
+        {
+            var intent = new Intent(this, typeof(AccepteerActivity));
+            StartActivity(intent);
         }
 
         private void MapButton_Click(object sender, EventArgs e)

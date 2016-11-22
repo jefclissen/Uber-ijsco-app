@@ -61,8 +61,8 @@ namespace googlemaps
                 {
                     map.AddMarker(locaties[i]);
                 }
-                map.MoveCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(locaties[0].Position.Latitude, locaties[0].Position.Longitude), 15));
-                map.AnimateCamera(CameraUpdateFactory.ZoomTo(15), 2000, null);
+                //map.MoveCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(locaties[0].Position.Latitude, locaties[0].Position.Longitude), 15));
+                //map.AnimateCamera(CameraUpdateFactory.ZoomTo(15), 2000, null);
             }
         }
     }

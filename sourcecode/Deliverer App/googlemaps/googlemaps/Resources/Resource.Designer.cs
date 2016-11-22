@@ -331,6 +331,12 @@ namespace googlemaps
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f070011
+			public const int aanvragenButton = 2131165201;
+			
+			// aapt resource value: 0x7f07000e
+			public const int accepteerButton = 2131165198;
+			
 			// aapt resource value: 0x7f070005
 			public const int adjust_height = 2131165189;
 			
@@ -349,14 +355,17 @@ namespace googlemaps
 			// aapt resource value: 0x7f070007
 			public const int icon_only = 2131165191;
 			
+			// aapt resource value: 0x7f07000d
+			public const int klantenListView = 2131165197;
+			
 			// aapt resource value: 0x7f07000c
 			public const int light = 2131165196;
 			
-			// aapt resource value: 0x7f07000d
-			public const int map = 2131165197;
+			// aapt resource value: 0x7f07000f
+			public const int map = 2131165199;
 			
-			// aapt resource value: 0x7f07000e
-			public const int mapButton = 2131165198;
+			// aapt resource value: 0x7f070010
+			public const int mapButton = 2131165200;
 			
 			// aapt resource value: 0x7f070001
 			public const int none = 2131165185;
@@ -406,13 +415,16 @@ namespace googlemaps
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int Main = 2130903040;
+			public const int AccepteerLayout = 2130903040;
 			
 			// aapt resource value: 0x7f030001
-			public const int MainMenuLayout = 2130903041;
+			public const int Main = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int MapView = 2130903042;
+			public const int MainMenuLayout = 2130903042;
+			
+			// aapt resource value: 0x7f030003
+			public const int MapView = 2130903043;
 			
 			static Layout()
 			{

@@ -16,5 +16,13 @@ namespace Deliverer.Core.Service
         {
             return klantRepository.GeefAlleKlaten();
         }
+        public void pushGeaccepteerdeKlanten(List<Klant> klanten)
+        {
+            klantRepository.pushGeaccepteerdeKlanten(klanten);
+        }
+        public List<Klant> getGeaccepteerdeKlanten()
+        {
+            return klantRepository.getGeaccepteerdeKlanten();
+        }
     }
 }

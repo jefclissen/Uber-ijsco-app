@@ -13,6 +13,7 @@ using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
 using Deliverer.Core.Service;
 using Deliverer.Core.Modle;
+using Plugin.Geolocator;
 
 namespace googlemaps
 {
@@ -22,14 +23,17 @@ namespace googlemaps
         private List<Klant> klanten;
         private MarkerOptions[] locaties;
         private KlantDataService dataService;
+        private MarkerOptions myPositionMarker;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             
 
             getKlanten();
+           // getMyLocation();
             makeMarkers();
-            makeMap();            
+            makeMap();
+                       
         }
 
         public void getKlanten()
@@ -50,6 +54,18 @@ namespace googlemaps
                 locaties[i] = marker;
             }
         }
+        private async void getMyLocation()
+        {
+            var locator = CrossGeolocator.Current;
+            locator.DesiredAccuracy = 50;
+
+            var position = await locator.GetPositionAsync(10000);
+
+            myPositionMarker.SetPosition(new LatLng(position.Latitude, position.Longitude));
+            myPositionMarker.SetTitle("mijn positie");
+
+            
+        }
         private void makeMap()
         {
             SetContentView(Resource.Layout.MapView);
@@ -61,7 +77,20 @@ namespace googlemaps
                 {
                     map.AddMarker(locaties[i]);
                 }
+                
+                if(myPositionMarker != null)
+                {
+                    map.AddMarker(myPositionMarker); //zet huidige locatie op kaart
+                    zoomToLocation(myPositionMarker, map, 7);
 
+                }
+                else
+                {
+                    MarkerOptions marker = new MarkerOptions();
+                    marker.SetPosition(new LatLng(51.218999, 4.401556));
+                    zoomToLocation(marker, map, 20);
+                }
+                /*
                 if(locaties == null || locaties.Length ==0)
                 {
                     MarkerOptions marker = new MarkerOptions();
@@ -71,7 +100,7 @@ namespace googlemaps
                 else
                 {
                     zoomToLocation(locaties[0], map, 7);
-                }
+                }*/
             }
         }
         private void zoomToLocation(MarkerOptions locatie, GoogleMap map, int zoom)

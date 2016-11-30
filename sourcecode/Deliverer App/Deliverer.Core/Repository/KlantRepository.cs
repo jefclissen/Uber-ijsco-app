@@ -12,15 +12,13 @@ namespace Deliverer.Core.Repository
 {
     public class KlantRepository
     {
+        #region get klanten from server
         #region from server
+        /*
         private static List<Klant> klanten = new List<Klant>();
-        public KlantRepository()
+        private async void getKlantenFromServer()
         {
-            getKlanten();
-        }
-        private async void getKlanten()
-        {
-            WebRequest request = WebRequest.Create("http://192.168.1.57:3000/userlist"); //ip is ip van de pc waar node/mongo op draaid
+            WebRequest request = WebRequest.Create("http://192.168.0.235:3000/userlist"); //ip is ip van de pc waar node/mongo op draaid
 
             // If required by the server, set the credentials.
             request.Credentials = CredentialCache.DefaultCredentials;
@@ -40,11 +38,11 @@ namespace Deliverer.Core.Repository
             //Console.WriteLine(responseFromServer);
             // List<Client> clientList = new List<Client>();
             klanten = JsonConvert.DeserializeObject<List<Klant>>(responseFromServer);
-        }
+        }*/
         #endregion
         #region hardcode
-        /*
-         
+
+
         private static List<Klant> klanten = new List<Klant>()
         {
             
@@ -66,20 +64,31 @@ namespace Deliverer.Core.Repository
                 Longitude = 51.229137,
                 Latitude = 4.413205
             }
-            
-            
-
-            
-
         };
         
-            */
+            
         #endregion
-
+        
         public List<Klant> GeefAlleKlaten()
         {
+            //getKlantenFromServer(); //enkel gebruiken bij niet hardcode deel
             return klanten;
-
         }
+        #endregion
+
+        #region geaccepteerde klanten
+        private List<Klant> geaccepteerdeKlanten;
+        public void pushGeaccepteerdeKlanten(List<Klant> klanten) //push klanten naar server
+        {
+            geaccepteerdeKlanten = new List<Klant>();
+            geaccepteerdeKlanten = klanten;
+
+            //hier code om klanten naar server te poucen
+        }
+        public List<Klant> getGeaccepteerdeKlanten()
+        {
+            return geaccepteerdeKlanten;
+        }
+        #endregion
     }
 }

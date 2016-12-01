@@ -1,9 +1,0 @@
-extends layout
-
-block content
-    h1= title
-    form#formAddUser(name="addlocation",method="post",action="/addlocation")
-        input#inputUserName(type="text", placeholder="username", name="userName")
-        input#inputUserLat(type="int", placeholder="userlat", name="userLat")
-        input#inputUserLong(type="int", placeholder="userlong", name="userLong")
-        button#btnSubmit(type="submit") submit

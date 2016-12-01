@@ -7,6 +7,7 @@ using System.Web;
 
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net.Http;
 
 namespace Examples.System.Net
 {
@@ -22,7 +23,7 @@ namespace Examples.System.Net
         
         public static void Main()
         {
-            /*Console.WriteLine("POST");
+            Console.WriteLine("POST");
             Console.Write("Username");
             string username = Console.ReadLine();
             Console.Write("Latitude");
@@ -36,7 +37,20 @@ namespace Examples.System.Net
 
         public static void post(string n, string lat, string longi)
         {
+            using (var client = new HttpClient())
+            {
+                var values = new Dictionary<string, string>
+                {
+                   { "thing1", "hello" },
+                   { "thing2", "world" }
+                };
 
+                var content = new FormUrlEncodedContent(values);
+
+                var response = await client.PostAsync("http://localhost:3000/addlocation", content);
+
+                var responseString = await response.Content.ReadAsStringAsync();
+            }
         }
         public static void get()
         {

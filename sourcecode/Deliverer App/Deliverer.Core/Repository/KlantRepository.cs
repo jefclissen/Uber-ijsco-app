@@ -69,7 +69,7 @@ namespace Deliverer.Core.Repository
             
         #endregion
         
-        public List<Klant> GeefAlleKlaten()
+        public List<Klant> GeefAlleKlatenFromServer()
         {
             //getKlantenFromServer(); //enkel gebruiken bij niet hardcode deel
             return klanten;

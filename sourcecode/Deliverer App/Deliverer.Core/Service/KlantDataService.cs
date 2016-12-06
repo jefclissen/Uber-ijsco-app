@@ -12,9 +12,9 @@ namespace Deliverer.Core.Service
     {
         private static KlantRepository klantRepository = new KlantRepository();
 
-        public List<Klant> GeefAlleKlanten()
+        public List<Klant> GeefAlleKlantenFromServer()
         {
-            return klantRepository.GeefAlleKlaten();
+            return klantRepository.GeefAlleKlatenFromServer();
         }
         public void pushGeaccepteerdeKlanten(List<Klant> klanten)
         {

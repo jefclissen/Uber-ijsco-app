@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.Threading;
 
 namespace googlemaps
 {
@@ -22,10 +23,41 @@ namespace googlemaps
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.MainMenuLayout);
 
+            ThreadStart myThreadDelegate = new ThreadStart(getNotification);
+            Thread myThread = new Thread(myThreadDelegate);
+            myThread.Start();
+
             FindViews();
             HandleEvents();
         }
 
+        public void getNotification()
+        {
+            int coutn = 0;
+            //Toast.MakeText(, "klanten zijn toegevoegd", ToastLength.Short).Show();
+            while (true)
+            {
+                //code voor notification
+                Notification.Builder builder = new Notification.Builder(this)
+                .SetContentTitle("Nieuwe klanten")
+                .SetContentText("Er zijn " + coutn+" nieuwe klanten")
+                .SetSmallIcon(Android.Resource.Drawable.IcDialogAlert);
+
+                // Build the notification:
+                Notification notification = builder.Build();
+
+                // Get the notification manager:
+                NotificationManager notificationManager =
+                    GetSystemService(Context.NotificationService) as NotificationManager;
+
+                // Publish the notification:
+                const int notificationId = 0;
+                notificationManager.Notify(notificationId, notification);
+
+                coutn++;
+                Thread.Sleep(7000);
+            }
+        }
         private void FindViews()
         {
             mapButton = FindViewById<Button>(Resource.Id.mapButton);

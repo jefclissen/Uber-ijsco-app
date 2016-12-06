@@ -23,6 +23,7 @@ namespace googlemaps
         private List<Klant> klanten;
         private MarkerOptions[] locaties;
         private KlantDataService dataService;
+        private LatLng myPosition;
         private MarkerOptions myPositionMarker;
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -30,16 +31,27 @@ namespace googlemaps
             
 
             getKlanten();
-           // getMyLocation();
-            makeMarkers();
-            makeMap();
+            if(klanten != null)
+            {
+                // getMyLocation();
+                makeMarkers();
+                makeMap();
+            }
+            else
+            {//als er geen klanten zijn terug naar mainmenu en toast meegeven
+                Toast.MakeText(this, "klanten zijn toegevoegd", ToastLength.Long).Show();
+                var intent = new Intent(this, typeof(MainMenuActivity));
+                StartActivity(intent);
+            }
+           
+            
                        
         }
 
         public void getKlanten()
         {
             KlantDataService dataService = new KlantDataService();
-            klanten = dataService.GeefAlleKlanten();
+            klanten = dataService.getGeaccepteerdeKlanten();
         }
         public void makeMarkers()
         {
@@ -56,13 +68,14 @@ namespace googlemaps
         }
         private async void getMyLocation()
         {
-            var locator = CrossGeolocator.Current;
+            myPosition = new LatLng(0, 0);
+            /*var locator = CrossGeolocator.Current;
             locator.DesiredAccuracy = 50;
 
             var position = await locator.GetPositionAsync(10000);
 
             myPositionMarker.SetPosition(new LatLng(position.Latitude, position.Longitude));
-            myPositionMarker.SetTitle("mijn positie");
+            myPositionMarker.SetTitle("mijn positie");*/
 
             
         }
@@ -71,14 +84,16 @@ namespace googlemaps
             SetContentView(Resource.Layout.MapView);
             MapFragment mapFrag = (MapFragment)FragmentManager.FindFragmentById(Resource.Id.map);
             GoogleMap map = mapFrag.Map;
+
+            map.MyLocationEnabled = true;
             if (map != null)
             {
                 for (int i = 0; i < locaties.Length; i++)
                 {
                     map.AddMarker(locaties[i]);
                 }
-                
-                if(myPositionMarker != null)
+                zoomToLocation(new LatLng(51.218999, 4.401556), map, 30);
+                /*if(myPositionMarker != null)
                 {
                     map.AddMarker(myPositionMarker); //zet huidige locatie op kaart
                     zoomToLocation(myPositionMarker, map, 7);
@@ -103,9 +118,9 @@ namespace googlemaps
                 }*/
             }
         }
-        private void zoomToLocation(MarkerOptions locatie, GoogleMap map, int zoom)
+        private void zoomToLocation(LatLng locatie, GoogleMap map, int zoom)
         {
-            map.MoveCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(locatie.Position.Latitude, locatie.Position.Longitude), zoom));
+            map.MoveCamera(CameraUpdateFactory.NewLatLngZoom(locatie, zoom));
             map.AnimateCamera(CameraUpdateFactory.ZoomTo(zoom), 2000, null);
         }
     }

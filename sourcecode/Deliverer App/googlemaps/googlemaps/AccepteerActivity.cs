@@ -54,6 +54,9 @@ namespace googlemaps
                     geaccepteerdeKlanten.Add(serverKlanten[i]);
             }
             dataService.pushGeaccepteerdeKlanten(geaccepteerdeKlanten);
+            Toast.MakeText(this, "klanten zijn toegevoegd", ToastLength.Long).Show();
+            var intent = new Intent(this, typeof(MainMenuActivity));
+            StartActivity(intent);
         }
 
 
@@ -63,8 +66,8 @@ namespace googlemaps
         }
         private void VulLijst()
         {
-            
-            serverKlanten = dataService.GeefAlleKlanten();
+
+            serverKlanten = dataService.GeefAlleKlantenFromServer();
 
             naamKlanten = new List<string>();
             klantenHelper = new bool[serverKlanten.Count];

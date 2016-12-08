@@ -76,8 +76,12 @@ namespace Deliverer.Core.Repository
         }
         #endregion
 
+
+
+
         #region geaccepteerde klanten
         private List<Klant> geaccepteerdeKlanten;
+        private List<Klant> gewijgerdeKlanten;
         public void pushGeaccepteerdeKlanten(List<Klant> klanten) //push klanten naar server
         {
             geaccepteerdeKlanten = new List<Klant>();
@@ -85,9 +89,35 @@ namespace Deliverer.Core.Repository
 
             //hier code om klanten naar server te poucen
         }
+        public void pushGewijgerdeKlanten(List<Klant> klanten) //push klanten naar server
+        {
+            gewijgerdeKlanten = new List<Klant>();
+            gewijgerdeKlanten = klanten;
+
+            //klanten moeten niet naar server (later misschien een optie voor extra veiligheid)
+        }
+
         public List<Klant> getGeaccepteerdeKlanten()
         {
+            //deze moeten niet van server gehaald worden
+            //eventueel later een optie (om veiligheid in te bouwen)
             return geaccepteerdeKlanten;
+        }
+
+        public List<Klant> getGewijgerdeKlanten()
+        {
+            if(gewijgerdeKlanten == null)
+            {
+                gewijgerdeKlanten = new List<Klant>();
+                gewijgerdeKlanten.Add(new Klant()
+                {
+                    Naam = "XXXXGEENKLANTENXXXX",
+                    Longitude = 0,
+                    Latitude = 0
+                });
+            }
+            //deze moeten niet van server worden gehaald
+            return gewijgerdeKlanten;
         }
         #endregion
     }

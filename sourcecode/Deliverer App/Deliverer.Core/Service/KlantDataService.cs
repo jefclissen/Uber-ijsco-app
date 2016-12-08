@@ -24,5 +24,14 @@ namespace Deliverer.Core.Service
         {
             return klantRepository.getGeaccepteerdeKlanten();
         }
+
+        public void pushGewijgerdeKlanten(List<Klant> klanten)
+        {
+            klantRepository.pushGewijgerdeKlanten(klanten);
+        }
+        public List<Klant> getGewijgerdeKlanten()
+        {
+            return klantRepository.getGewijgerdeKlanten();
+        }
     }
 }

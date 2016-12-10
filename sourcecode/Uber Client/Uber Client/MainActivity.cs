@@ -5,23 +5,27 @@ using System;
 using Android.Content;
 using Plugin.Geolocator;
 using System.Collections.Specialized;
-//using System.Net;
+using System.Net;
 
 namespace Uber_Client
 {
     [Activity(Label = "Uber_Client", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
+        //SignUp Menu
         private Button mBtnSignUp;
         private Button mBtnSignIn;
+        private ProgressBar mProgressBar;
 
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.Login);
+
             mBtnSignUp = FindViewById<Button>(Resource.Id.btnSignUp);
             mBtnSignIn = FindViewById<Button>(Resource.Id.btnSignIn);
+            mProgressBar = FindViewById<ProgressBar>(Resource.Id.progressBar1);
             mBtnSignUp.Click += MBtnSignUp_Click;
             mBtnSignIn.Click += MBtnSignIn_Click;
 
@@ -38,38 +42,37 @@ namespace Uber_Client
             FragmentTransaction trans = FragmentManager.BeginTransaction();
             SignUpDialog signUpDialog = new SignUpDialog();
             signUpDialog.Show(trans, "dialog fragment");
+
+            signUpDialog.mOnsignUpComplete += SignUpDialog_mOnsignUpComplete;
         }
 
-
-        /*
-        private async void B_Click(object sender, EventArgs e)
+        private void SignUpDialog_mOnsignUpComplete(object sender, OnSignUpEventArgs e)
         {
-            
-            var locator = CrossGeolocator.Current;
-            locator.DesiredAccuracy = 50;
-            //var location = await locator.GetPositionAsync(timeoutMilliseconds:10000);
+            mProgressBar.Visibility = Android.Views.ViewStates.Visible;
+            //make invisible after HTTP async request
+            //user clicked signup btn/  event broadcasted from signupdialog class
+            //Toast.MakeText(this, "trying to upload", ToastLength.Long);
 
-            //Toast.MakeText(this, location.Latitude.ToString(), ToastLength.Long).Show();
 
-            Toast.MakeText(this, "trying to send data", ToastLength.Long).Show();
-            SendLocation("12.3456","65.4321");
-            
-            SetContentView(Resource.Layout.Login);
+            WebClient client = new WebClient();
+            Uri uri = new Uri("http://localhost:3000/createuser");
+            NameValueCollection parameters = new NameValueCollection();
+            parameters.Add("username", e.Firstname);
+            parameters.Add("email", e.Email);
+            parameters.Add("password", e.Password);
+
+            client.UploadValuesCompleted += Client_UploadValuesCompleted;
+            //client.UploadValuesAsync(uri, parameters);
+
         }
 
-        private void SendLocation(string latitude,string longitude)
+        private void Client_UploadValuesCompleted(object sender, UploadValuesCompletedEventArgs e)
         {
-            using (var client = new WebClient())
-            {
-                var values = new NameValueCollection();
-                values["Latitude"] = latitude;
-                values["Longitude"] = longitude;
-
-                var response = client.UploadValues("", values);
-            }
+            //fires when data is send and we have received an response from the server
+            //whether the data is accepted or not proceed to the app or give an error message
+            //succeeded intent to other activity.
+            //we can use the arguments of this method to indicate if the post to the database was accepted & we can store the accounts id here globally
         }
-    */
-
     }
 }
 

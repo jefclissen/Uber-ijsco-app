@@ -5,10 +5,19 @@
     android:layout_height="match_parent"
     android:minWidth="25px"
     android:minHeight="25px"
+    android:background="@android:color/background_light"
+    android:weightSum="100"
     android:gravity="bottom">
     <Button
+        android:id="@+id/iceCreamButton"
         android:text="GiveMeIceCream!"
+        android:layout_height="0dp"
+        android:layout_weight="30"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/iceCreamButton" />
+        android:drawableTop="@drawable/icoon"
+        android:backgroundTint="#ff6495ed"
+        android:textSize="25sp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"/>
 </LinearLayout>

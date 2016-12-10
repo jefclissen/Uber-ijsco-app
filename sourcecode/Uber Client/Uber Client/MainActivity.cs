@@ -9,7 +9,7 @@ using System.Net;
 
 namespace Uber_Client
 {
-    [Activity(Label = "Uber_Client", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "Uber Ijsco Client", MainLauncher = true, Icon = "@drawable/icoon")]
     public class MainActivity : Activity
     {
         //SignUp Menu

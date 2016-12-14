@@ -64,16 +64,16 @@ Latitude
 
 ## /ikwildezeklantenhelpen --Als een driver een klant gaat helpen
 ### FRONTEND  
-email
-name
-userLong
-userLat
+email  
+name  
+userLong  
+userLat  
 
 ### BACKEND 
-Name
-Longitude
-Latitude
-Email
+Name  
+Longitude  
+Latitude  
+Email  
 
 # GETS
 
@@ -96,7 +96,7 @@ ExpirationDay
 Zipcode  
 
 ## /inprogress --Geeft alle klanten weer die aanvaard zijn en waar een icecocar naar onderweg is
-Name
-Longitude
-Latitude
-Email
+Name  
+Longitude  
+Latitude  
+Email  

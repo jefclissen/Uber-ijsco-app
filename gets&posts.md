@@ -7,7 +7,7 @@ email
 password  
 
 ### BACKEND: 
-Name  
+Username  
 Email  
 Password  
 

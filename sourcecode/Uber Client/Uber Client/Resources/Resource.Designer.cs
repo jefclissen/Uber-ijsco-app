@@ -66,8 +66,8 @@ namespace Uber_Client
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050009
-			public const int btnDialogEmail = 2131034121;
+			// aapt resource value: 0x7f05000a
+			public const int btnDialogEmail = 2131034122;
 			
 			// aapt resource value: 0x7f050001
 			public const int btnSignIn = 2131034113;
@@ -89,6 +89,9 @@ namespace Uber_Client
 			
 			// aapt resource value: 0x7f050006
 			public const int txtFirstname = 2131034118;
+			
+			// aapt resource value: 0x7f050009
+			public const int txtInfo = 2131034121;
 			
 			// aapt resource value: 0x7f050002
 			public const int txtOr = 2131034114;

@@ -75,11 +75,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Login.cs" />
-    <Compile Include="MainActivity.cs" />
+    <Compile Include="LoginActivity.cs" />
+    <Compile Include="MainAppActivity.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SignInDialog.cs" />
     <Compile Include="SignUpDialog.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -91,9 +92,12 @@
     <AndroidResource Include="Resources\layout\SignUpDialog.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\SignInDialog.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\Main.axml">
+    <AndroidResource Include="Resources\layout\MainApp.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

@@ -70,13 +70,7 @@ namespace Uber_Client
 
         private void MBtnSignUp_Click(object sender, EventArgs e)
         {
-            //user clicked signUp btn
-            //event broadcast that button has been pressed with custom event argument class (made above)
-            //POST HERE ?
-            //mProgressBar.Visibility = Android.Views.ViewStates.Visible;//make invisible after HTTP async request
             string mResult;
-            //Toast.MakeText(this, "trying to upload", ToastLength.Long).Show();
-
             using (WebClient client = new WebClient())
             {
 
@@ -90,22 +84,15 @@ namespace Uber_Client
             }
             if (mResult.Substring(0, 1) == "1")//SUCCES
             {
-                //Toast.MakeText(this, mResult.Substring(1), ToastLength.Long).Show();
                 mtxtInfo.Text = mResult.Substring(1);
                 mOnsignUpComplete.Invoke(this, new OnSignUpEventArgs(mTxtFirstname.Text, mTxtEmail.Text, mTxtPassword.Text));
                 this.Dismiss();
             }
             else if(mResult.Substring(0, 1) == "0")//Failed to make account 
             {
-                //Toast.MakeText(this, mResult.Substring(1), ToastLength.Long).Show();
                 mtxtInfo.Text = mResult.Substring(1);
-                
-                //mTxtEmail.Text = mResult.Substring(1);
-                //substring for removing first character of string 
+                mTxtEmail.Text = "";
             }
-            //POST
-
-            //this.Dismiss();//close dialog
 
         }
 

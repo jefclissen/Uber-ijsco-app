@@ -7,18 +7,12 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Util;
 using Android.Views;
 using Android.Widget;
 
 namespace Uber_Client
 {
-    public class Login : Activity
+    class SignInDialog : DialogFragment
     {
-        protected override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-
-        }
     }
 }

@@ -62,15 +62,15 @@ Longitude
 Latitude  
 
 
-## /ikwildezeklantenhelpen --Als een driver een klant gaat helpen
+## /helpthisclient --Als een driver een klant gaat helpen
 ### FRONTEND  
-email  
-name  
+username  
 userLong  
 userLat  
+email  
 
 ### BACKEND 
-Name  
+Username  
 Longitude  
 Latitude  
 Email  

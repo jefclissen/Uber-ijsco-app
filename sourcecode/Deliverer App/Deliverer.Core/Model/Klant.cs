@@ -21,8 +21,7 @@ namespace Deliverer.Core.Modle
             get;set;
         }
 
-        public double Latitude
-        {
+        public double Latitude { 
             get;set;
         }
     }

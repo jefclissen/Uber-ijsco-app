@@ -55,7 +55,7 @@ namespace googlemaps
             }
             dataService.pushGeaccepteerdeKlanten(geaccepteerdeKlanten);
             Toast.MakeText(this, "klanten zijn toegevoegd", ToastLength.Long).Show();
-            var intent = new Intent(this, typeof(MainMenuActivity));
+            var intent = new Intent(this, typeof(MapActivity));
             StartActivity(intent);
         }
 

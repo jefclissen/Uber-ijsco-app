@@ -10,15 +10,15 @@ using System.Threading.Tasks;
 
 namespace Deliverer.Core.Repository
 {
-    public class KlantRepository
+        public class KlantRepository
     {
         #region get klanten from server
         #region from server
-        /*
+        
         private static List<Klant> klanten = new List<Klant>();
         private async void getKlantenFromServer()
         {
-            WebRequest request = WebRequest.Create("http://192.168.0.235:3000/userlist"); //ip is ip van de pc waar node/mongo op draaid
+            WebRequest request = WebRequest.Create("http://35.165.103.236:80/unhandledusers"); 
 
             // If required by the server, set the credentials.
             request.Credentials = CredentialCache.DefaultCredentials;
@@ -38,10 +38,10 @@ namespace Deliverer.Core.Repository
             //Console.WriteLine(responseFromServer);
             // List<Client> clientList = new List<Client>();
             klanten = JsonConvert.DeserializeObject<List<Klant>>(responseFromServer);
-        }*/
+        }
         #endregion
         #region hardcode
-
+        /*
 
         private static List<Klant> klanten = new List<Klant>()
         {
@@ -66,12 +66,12 @@ namespace Deliverer.Core.Repository
             }
         };
         
-            
+            */
         #endregion
         
         public List<Klant> GeefAlleKlatenFromServer()
         {
-            //getKlantenFromServer(); //enkel gebruiken bij niet hardcode deel
+            getKlantenFromServer(); //enkel gebruiken bij niet hardcode deel
             return klanten;
         }
         #endregion
@@ -82,12 +82,32 @@ namespace Deliverer.Core.Repository
         #region geaccepteerde klanten
         private List<Klant> geaccepteerdeKlanten;
         private List<Klant> gewijgerdeKlanten;
-        public void pushGeaccepteerdeKlanten(List<Klant> klanten) //push klanten naar server
+        
+        public async void pushGeaccepteerdeKlanten(List<Klant> klanten) //push klanten naar server
         {
             geaccepteerdeKlanten = new List<Klant>();
             geaccepteerdeKlanten = klanten;
 
             //hier code om klanten naar server te poucen
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://35.165.103.236:80/ikwildezeklantenhelpen");
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync()))
+            {
+                //string json = "{'name':'Pim','userLat':'4','userLong':'41}";
+                string json = "{\"name\":\'Pim\","+ "\"userLat\":\"4\"," + "\"userLong\":\"41\"}";
+
+                streamWriter.Write(json);
+                streamWriter.Flush();
+                //streamWriter.Close();
+            }
+
+            var httpResponse =  (HttpWebResponse)await httpWebRequest.GetResponseAsync();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd();
+            }
         }
         public void pushGewijgerdeKlanten(List<Klant> klanten) //push klanten naar server
         {
@@ -96,7 +116,13 @@ namespace Deliverer.Core.Repository
 
             //klanten moeten niet naar server (later misschien een optie voor extra veiligheid)
         }
-
+        public void klantBediend(Klant klant)
+        {
+            //data uit geaccepteerd
+            geaccepteerdeKlanten.Remove(klant);
+            //data nog uit handel van server
+            //data in handeld klanten
+        }
         public List<Klant> getGeaccepteerdeKlanten()
         {
             //deze moeten niet van server gehaald worden

@@ -33,5 +33,10 @@ namespace Deliverer.Core.Service
         {
             return klantRepository.getGewijgerdeKlanten();
         }
+
+        public void klantBediend(Klant klant)
+        {
+            klantRepository.klantBediend(klant);
+        }
     }
 }

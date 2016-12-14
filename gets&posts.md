@@ -78,12 +78,6 @@ Email
 # GETS
 
 ## /userlist --Geeft alle klanten weer die er bestaan
-Username  
-Email  
-Longitude  
-Latitude  
-
-## /unhandledusers --Geeft alle klanten weer die een verzoek hebben ingediend en nog niet geholpen zijn
 Naam  
 Email  
 Password  
@@ -94,6 +88,12 @@ CVC
 ExpirationMonth  
 ExpirationDay  
 Zipcode  
+
+## /unhandledusers --Geeft alle klanten weer die een verzoek hebben ingediend en nog niet geholpen zijn
+Username  
+Email  
+Longitude  
+Latitude  
 
 ## /inprogress --Geeft alle klanten weer die aanvaard zijn en waar een icecocar naar onderweg is
 Name  

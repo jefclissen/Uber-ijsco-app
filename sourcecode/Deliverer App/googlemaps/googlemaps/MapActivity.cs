@@ -27,6 +27,9 @@ namespace googlemaps
         private KlantDataService dataService;
         private LatLng myPosition;
         private MarkerOptions myPositionMarker;
+        private GoogleMap map;
+        private List<LatLng> punten;
+        private List<Polyline> lijnen;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -59,8 +62,8 @@ namespace googlemaps
             {
 
                 MarkerOptions marker = new MarkerOptions();
-                marker.SetPosition(new LatLng(klanten[i].Longitude, klanten[i].Latitude));
-                marker.SetTitle(klanten[i]._id);
+                marker.SetPosition(new LatLng(klanten[i].Latitude, klanten[i].Longitude));
+                marker.SetTitle(klanten[i].Username);
 
                 markers[i] = marker;
             }
@@ -78,21 +81,51 @@ namespace googlemaps
 
 
         }
+
+
         private void makeMap()
         {
             SetContentView(Resource.Layout.MapView);
             MapFragment mapFrag = (MapFragment)FragmentManager.FindFragmentById(Resource.Id.map);
-            GoogleMap map = mapFrag.Map;
+            map = mapFrag.Map;
 
-            Polyline line = map.AddPolyline(new PolylineOptions()
-     .Add(new LatLng(51.5, -0.1), new LatLng(40.7, -74.0)));
+            /*Polyline line = map.AddPolyline(new PolylineOptions()
+     .Add(new LatLng(-120.2, 38.5), new LatLng(-120.95, 40.7)));
+            Polyline line2 = map.AddPolyline(new PolylineOptions()
+     .Add(new LatLng(-120.95, 40.7), new LatLng(-126.453, 43.252)));*/
             // .Width(5)
             // .Color(Color.Red));
 
-            map.MyLocationEnabled = true;
+            // Polyline line = map.AddPolyline(new PolylineOptions().);
+            punten = new List<LatLng>();
+            lijnen = new List<Polyline>();
+            punten.Add(new LatLng(51.37223, 4.47566));
+            punten.Add(new LatLng(51.37164, 4.47443));
+            punten.Add(new LatLng(51.37135, 4.47386));
+            punten.Add(new LatLng(51.37098, 4.47303));
+            punten.Add(new LatLng(51.37098, 4.47303));
+            punten.Add(new LatLng(51.3706, 4.47411));
+            punten.Add(new LatLng(51.36993, 4.47607));
+            punten.Add(new LatLng(51.36927, 4.47816));
+            punten.Add(new LatLng(51.3692, 4.47831));
+            punten.Add(new LatLng(51.36915, 4.47838));
+            punten.Add(new LatLng(51.3691, 4.47843));
+            punten.Add(new LatLng(51.36887, 4.47853));
+            punten.Add(new LatLng(51.36887, 4));
+
+            for (int i = 0; i < punten.Count()-1; i++)
+            {
+                //lijnen.Add(new Polyline();
+                Polyline line = map.AddPolyline(new PolylineOptions()
+     .Add(punten[i], punten[i+1]));
+            }  
+
+
+
             if (map != null)
             {
-
+                map.MyLocationEnabled = true;
+                map.TrafficEnabled = true;
                 for (int i = 0; i < markers.Length; i++)
                 {
                     map.AddMarker(markers[i]);
@@ -100,7 +133,8 @@ namespace googlemaps
                     map.SetOnInfoWindowClickListener(this);
                     //map.SetInfoWindowAdapter(new CustomMarkerPopupAdapter(LayoutInflater));
                 }
-                zoomToLocation(new LatLng(51.218999, 4.401556), map, 30);
+              //  map.MyLocationChange += Map_MyLocationChange;
+               
 
                 /*if(myPositionMarker != null)
                 {
@@ -127,6 +161,12 @@ namespace googlemaps
                 }*/
             }
         }
+
+        private void Map_MyLocationChange(object sender, MyLocationChangeEventArgs e)
+        {
+         //   zoomToLocation(new LatLng(map.l,map.MyLocation.Longitude), map, 30);
+        }
+
         private void zoomToLocation(LatLng locatie, GoogleMap map, int zoom)
         {
             map.MoveCamera(CameraUpdateFactory.NewLatLngZoom(locatie, zoom));
@@ -145,7 +185,7 @@ namespace googlemaps
             int i = Convert.ToInt16(s);
 
             View view = LayoutInflater.Inflate(Resource.Layout.CustomMarkerLayout, null, false);
-            view.FindViewById<TextView>(Resource.Id.naamTextView).Text = (string)klanten[i].Naam;
+            view.FindViewById<TextView>(Resource.Id.naamTextView).Text = (string)klanten[i].Username;
             //view.FindViewById<Button>(Resource.Id.bedienButton).Click += MapActivity_Click;
             return view;
         }

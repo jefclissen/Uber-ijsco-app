@@ -18,7 +18,7 @@ namespace Deliverer.Core.Repository
         private static List<Klant> klanten = new List<Klant>();
         private async void getKlantenFromServer()
         {
-            WebRequest request = WebRequest.Create("http://35.165.103.236:80/unhandledusers"); 
+            WebRequest request = WebRequest.Create("http://35.165.103.236:80/unhandledclients"); 
 
             // If required by the server, set the credentials.
             request.Credentials = CredentialCache.DefaultCredentials;
@@ -88,8 +88,10 @@ namespace Deliverer.Core.Repository
             geaccepteerdeKlanten = new List<Klant>();
             geaccepteerdeKlanten = klanten;
 
+
+
             //hier code om klanten naar server te poucen
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://35.165.103.236:80/ikwildezeklantenhelpen");
+           /* var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://35.165.103.236:80/helpclient");
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
@@ -107,7 +109,7 @@ namespace Deliverer.Core.Repository
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var result = streamReader.ReadToEnd();
-            }
+            }*/
         }
         public void pushGewijgerdeKlanten(List<Klant> klanten) //push klanten naar server
         {
@@ -137,7 +139,7 @@ namespace Deliverer.Core.Repository
                 gewijgerdeKlanten = new List<Klant>();
                 gewijgerdeKlanten.Add(new Klant()
                 {
-                    Naam = "XXXXGEENKLANTENXXXX",
+                    Username = "XXXXGEENKLANTENXXXX",
                     Longitude = 0,
                     Latitude = 0
                 });

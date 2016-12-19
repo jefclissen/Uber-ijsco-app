@@ -11,6 +11,8 @@ using Android.Views;
 using Android.Widget;
 using Deliverer.Core.Modle;
 using Deliverer.Core.Service;
+using System.Net;
+using System.Collections.Specialized;
 
 namespace googlemaps
 {
@@ -50,7 +52,7 @@ namespace googlemaps
 
         private void FillViews()
         {
-            naamKlantTextView.Text = klant.Naam;
+            naamKlantTextView.Text = klant.Username;
             bediendButton.Click += BediendButton_Click;
         }
 
@@ -58,6 +60,22 @@ namespace googlemaps
         {
             //data uit geaccepteerd
             dataService.klantBediend(geaccepteerdeKlanten[klantId]);
+            Toast.MakeText(this, geaccepteerdeKlanten[klantId].Email, ToastLength.Long).Show();
+
+            string mResult;
+            using (WebClient client = new WebClient())
+            {
+
+                //Uri uri = new Uri("http://35.165.103.236:80/clientlogin");
+                string uri = "http://35.165.103.236:80/doneclient";
+                NameValueCollection parameters = new NameValueCollection();
+               // parameters.Add("username", geaccepteerdeKlanten[klantId].Username);
+               // parameters.Add("userLong", Convert.ToString(geaccepteerdeKlanten[klantId].Longitude));
+               // parameters.Add("userLat", Convert.ToString(geaccepteerdeKlanten[klantId].Latitude));
+                parameters.Add("email", geaccepteerdeKlanten[klantId].Email);
+                byte[] response = client.UploadValues(uri, parameters);
+                mResult = System.Text.Encoding.UTF8.GetString(response);
+            }
             //data in handeld klanten
             var intent = new Intent(this, typeof(MapActivity));
             StartActivity(intent);

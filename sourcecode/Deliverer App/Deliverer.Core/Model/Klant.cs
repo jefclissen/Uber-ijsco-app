@@ -12,9 +12,13 @@ namespace Deliverer.Core.Modle
         {
             get;set;
         }
-        public string Naam
+        public string Username
         {
             get;set;
+        }
+        public string Email
+        {
+            get; set;
         }
         public double Longitude
         {

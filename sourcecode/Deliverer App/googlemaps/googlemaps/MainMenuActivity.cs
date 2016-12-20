@@ -24,11 +24,11 @@ namespace googlemaps
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.MainMenuLayout);
-
+            
             ThreadStart myThreadDelegate = new ThreadStart(notificationThread);
             Thread myThread = new Thread(myThreadDelegate);
             myThread.Start();
-
+            
             FindViews();
             HandleEvents();
         }
@@ -47,7 +47,7 @@ namespace googlemaps
                 geweigerdeKlanten = dataService.getGewijgerdeKlanten();
 
                 aantalNieuweKlanten = serverKlanten.Count; //maximum aantal nieuwe klanten (gelijk aan server klanten)
-                if (geweigerdeKlanten[0].Naam != "XXXXGEENKLANTENXXXX")//wanneer er nog geen gewijgerde klanten zijn
+                if (geweigerdeKlanten[0].Username != "XXXXGEENKLANTENXXXX")//wanneer er nog geen gewijgerde klanten zijn
                 {
                     for (int i = 0; i < serverKlanten.Count; i++)
                     {
@@ -92,6 +92,7 @@ namespace googlemaps
                 notificationManager.Notify(notificationId, nieuweKlantNotification);
 
                 Thread.Sleep(7000);
+                
             }
         }
         private void FindViews()

@@ -12,6 +12,8 @@ using Android.Widget;
 using Deliverer.Core.Service;
 using Deliverer.Core.Modle;
 using System.Threading;
+using System.Net;
+using System.Collections.Specialized;
 
 namespace googlemaps
 {
@@ -51,11 +53,30 @@ namespace googlemaps
             for (int i = 0; i < serverKlanten.Count; i++)
             {
                 if (klantenHelper[i] == true)
+                {
                     geaccepteerdeKlanten.Add(serverKlanten[i]);
+
+
+                    string mResult;
+                    using (WebClient client = new WebClient())
+                    {
+
+                        //Uri uri = new Uri("http://35.165.103.236:80/clientlogin");
+                        string uri = "http://35.165.103.236:80/helpclient";
+                        NameValueCollection parameters = new NameValueCollection();
+                        parameters.Add("username", serverKlanten[i].Username);
+                        parameters.Add("userLong", Convert.ToString(serverKlanten[i].Longitude));
+                        parameters.Add("userLat", Convert.ToString(serverKlanten[i].Latitude));
+                        parameters.Add("email", serverKlanten[i].Email);
+                        byte[] response = client.UploadValues(uri, parameters);
+                        mResult = System.Text.Encoding.UTF8.GetString(response);
+                    }
+
+                }
             }
             dataService.pushGeaccepteerdeKlanten(geaccepteerdeKlanten);
             Toast.MakeText(this, "klanten zijn toegevoegd", ToastLength.Long).Show();
-            var intent = new Intent(this, typeof(MainMenuActivity));
+            var intent = new Intent(this, typeof(MapActivity));
             StartActivity(intent);
         }
 
@@ -74,7 +95,7 @@ namespace googlemaps
 
             for (int i = 0; i < serverKlanten.Count; i++)
             {
-                naamKlanten.Add(serverKlanten[i].Naam);
+                naamKlanten.Add(serverKlanten[i].Username);
                 klantenHelper[i] = false;
             }
             ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItemMultipleChoice, naamKlanten);

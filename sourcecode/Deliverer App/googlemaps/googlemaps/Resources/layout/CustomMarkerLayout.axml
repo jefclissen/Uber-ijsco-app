@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#E2E2E2"
+    android:weightSum="100"
+    android:minWidth="200px">
+    <TextView
+        android:text="naam"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/naamTextView"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:textColor="#000" />
+</LinearLayout>

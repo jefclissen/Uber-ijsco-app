@@ -331,8 +331,8 @@ namespace googlemaps
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f070011
-			public const int aanvragenButton = 2131165201;
+			// aapt resource value: 0x7f070014
+			public const int aanvragenButton = 2131165204;
 			
 			// aapt resource value: 0x7f07000e
 			public const int accepteerButton = 2131165198;
@@ -345,6 +345,9 @@ namespace googlemaps
 			
 			// aapt resource value: 0x7f07000a
 			public const int auto = 2131165194;
+			
+			// aapt resource value: 0x7f070011
+			public const int bediendButton = 2131165201;
 			
 			// aapt resource value: 0x7f07000b
 			public const int dark = 2131165195;
@@ -361,11 +364,17 @@ namespace googlemaps
 			// aapt resource value: 0x7f07000c
 			public const int light = 2131165196;
 			
-			// aapt resource value: 0x7f07000f
-			public const int map = 2131165199;
+			// aapt resource value: 0x7f070012
+			public const int map = 2131165202;
+			
+			// aapt resource value: 0x7f070013
+			public const int mapButton = 2131165203;
 			
 			// aapt resource value: 0x7f070010
-			public const int mapButton = 2131165200;
+			public const int naamKlantTextView = 2131165200;
+			
+			// aapt resource value: 0x7f07000f
+			public const int naamTextView = 2131165199;
 			
 			// aapt resource value: 0x7f070001
 			public const int none = 2131165185;
@@ -418,13 +427,22 @@ namespace googlemaps
 			public const int AccepteerLayout = 2130903040;
 			
 			// aapt resource value: 0x7f030001
-			public const int Main = 2130903041;
+			public const int CustomMarkerLayout = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int MainMenuLayout = 2130903042;
+			public const int KlantDetailActivity = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int MapView = 2130903043;
+			public const int Main = 2130903043;
+			
+			// aapt resource value: 0x7f030004
+			public const int MainMenuLayout = 2130903044;
+			
+			// aapt resource value: 0x7f030005
+			public const int MapView = 2130903045;
+			
+			// aapt resource value: 0x7f030006
+			public const int settingsLayout = 2130903046;
 			
 			static Layout()
 			{

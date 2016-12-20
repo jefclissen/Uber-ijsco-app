@@ -240,4 +240,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-node/nodetest1/data
+node/nodetest1

@@ -32,24 +32,24 @@ namespace Uber_Client
             mProgressBar = FindViewById<ProgressBar>(Resource.Id.progressBar1);
             mBtnSignUp.Click += MBtnSignUp_Click;
             mBtnSignIn.Click += MBtnSignIn_Click;
-
         }
 
         private void MBtnSignIn_Click(object sender, EventArgs e)
         {
-            //SetContentView(Resource.Layout.MainApp);
-            if (mCredentials.Get("email") != null)
-            {
-                var intent = new Intent(this, typeof(MainAppActivity));
-                intent.PutExtra("username", mCredentials.Get("username"));
-                intent.PutExtra("email", mCredentials.Get("email"));
-                intent.PutExtra("password", mCredentials.Get("password"));
-                StartActivity(intent);
-            }
-            else
-            {
-                Toast.MakeText(this,"Please sign up first?", ToastLength.Long).Show();
-            }
+            FragmentTransaction trans = FragmentManager.BeginTransaction();
+            //Toast.MakeText(this, mCredentials.Get("email"), ToastLength.Long);
+            SignInDialog signInDialog = new SignInDialog(mCredentials.Get("email"));
+            signInDialog.Show(trans, "dialog fragment");
+            signInDialog.mOnsignInComplete += SignInDialog_mOnsignInComplete;
+        }
+
+        private void SignInDialog_mOnsignInComplete(object sender, OnSignInEventArgs e)
+        {
+            var intent = new Intent(this, typeof(MainAppActivity));
+            intent.PutExtra("username", mCredentials.Get("username"));
+            intent.PutExtra("email", mCredentials.Get("email"));
+            intent.PutExtra("password", mCredentials.Get("password"));
+            StartActivity(intent);
         }
 
         private void MBtnSignUp_Click(object sender, EventArgs e)

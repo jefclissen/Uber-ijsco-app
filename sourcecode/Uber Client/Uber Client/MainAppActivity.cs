@@ -12,6 +12,7 @@ using Android.Widget;
 using System.Collections.Specialized;
 using System.Net;
 using Plugin.Geolocator;
+using System.Threading;
 
 namespace Uber_Client
 {
@@ -19,44 +20,118 @@ namespace Uber_Client
     public class MainAppActivity : Activity
     {
         private Button mBtnIceCream;
-        NameValueCollection credentials;
+        private Button mBtnAccount;
+        NameValueCollection mCredentials;
+        private TextView txtInfo;
+        public event EventHandler<EventArgs> Poll;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.MainApp);
-            credentials = new NameValueCollection();
+            mCredentials = new NameValueCollection();
 
-            credentials.Add("username", Intent.GetStringExtra("username"));//Get the data passed by previous Activity
-            credentials.Add("email", Intent.GetStringExtra("email"));
-            credentials.Add("password", Intent.GetStringExtra("password"));
+            mCredentials.Add("username", Intent.GetStringExtra("username"));//Get the data passed by previous Activity
+            mCredentials.Add("email", Intent.GetStringExtra("email"));
+            mCredentials.Add("password", Intent.GetStringExtra("password"));
 
-            mBtnIceCream = FindViewById<Button>(Resource.Id.iceCreamButton);
+            mBtnIceCream = FindViewById<Button>(Resource.Id.IceCreamBtn);
+            mBtnAccount = FindViewById<Button>(Resource.Id.AccountBtn);
             mBtnIceCream.Click += MBtnIceCream_Click;
+            mBtnAccount.Click += MBtnAccount_Click;
+            txtInfo = FindViewById<TextView>(Resource.Id.txtInfo);
+            Poll += MainAppActivity_Poll;
         }
 
-        private async void MBtnIceCream_Click(object sender, EventArgs e)
+
+
+        private  void MBtnIceCream_Click(object sender, EventArgs e)
         {
+            ThreadStart TS = new ThreadStart(Polling);
+            Thread mThread = new Thread(TS);
+            mThread.Start();
+
+            txtInfo.Text = "TEST";
+            /*
             var locator = CrossGeolocator.Current;
             locator.DesiredAccuracy = 50;
 
             var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
-            
+
+            NameValueCollection parameters = new NameValueCollection();
+            parameters.Add("email", credentials.Get("email"));
+            parameters.Add("username", credentials.Get("username"));
+            parameters.Add("userLong", position.Longitude.ToString().Replace(',', '.'));
+            parameters.Add("userLat", position.Latitude.ToString().Replace(',', '.'));
+
+            HttpRequest httpReq = new HttpRequest("http://35.165.103.236");
+            httpReq.PostRequestAsync("/icecreamrequest", parameters);
+            httpReq.mRequestCompleted += HttpReq_mRequestCompleted;
+            */
+            ///*
+            var locator = CrossGeolocator.Current;
+            locator.DesiredAccuracy = 50;
+
+            //var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+            //string Long = position.Longitude.ToString().Replace(',', '.');
 
             string mResult;
             using (WebClient client = new WebClient())
             {
-
                 Uri uri = new Uri("http://35.165.103.236:80/icecreamrequest");
                 NameValueCollection parameters = new NameValueCollection();
-                parameters.Add("email", credentials.Get("email"));
-                parameters.Add("username", credentials.Get("username"));
-                parameters.Add("userLong", position.Longitude.ToString() );
-                parameters.Add("userLat", position.Latitude.ToString());
+                parameters.Add("email", mCredentials.Get("email"));
+                parameters.Add("username", mCredentials.Get("username"));
+                //parameters.Add("userLong", position.Longitude.ToString().Replace(',', '.'));
+                //parameters.Add("userLat", position.Latitude.ToString().Replace(',', '.'));
+                parameters.Add("userLong", "4.4164027");
+                parameters.Add("userLat", "51.2298936");
                 byte[] response = client.UploadValues(uri, parameters);
                 mResult = System.Text.Encoding.UTF8.GetString(response);
             }
-
+             
             Toast.MakeText(this, mResult, ToastLength.Long).Show();
+            //*/
         }
-    }
+
+        private void Polling()
+        {
+            
+            //Toast.MakeText(this, "Thread running...", ToastLength.Long).Show();
+            while (true) {
+                Poll.Invoke(this, new EventArgs());      
+                Thread.Sleep(1000);
+            }
+        }
+        /*
+private void HttpReq_mRequestCompleted(object sender, RequestEventArgs e)
+{
+   Toast.MakeText(this, e.Response, ToastLength.Long).Show();
+}
+*/
+        private void MainAppActivity_Poll(object sender, EventArgs e)
+        {  
+            string result;
+            using (WebClient client = new WebClient())
+            {
+                Uri uri = new Uri("http://35.165.103.236:80/getinfo");
+                NameValueCollection parameters = new NameValueCollection();
+                parameters.Add("useremail", mCredentials.Get("email"));
+
+                byte[] response = client.UploadValues(uri, parameters);
+                result = System.Text.Encoding.UTF8.GetString(response);
+            }
+            RunOnUiThread(() => {
+                txtInfo.Text = result;
+            });
+        }
+
+        private void MBtnAccount_Click(object sender, EventArgs e)
+        {
+            var intent = new Intent(this, typeof(OptionsActivity));
+            intent.PutExtra("username", mCredentials.Get("username"));
+            intent.PutExtra("email", mCredentials.Get("email"));
+            intent.PutExtra("password", mCredentials.Get("password"));
+            StartActivity(intent);
+        }
+    } 
 }

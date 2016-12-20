@@ -6,7 +6,6 @@
     android:minWidth="300dp"
     android:minHeight="400dp">
     <EditText
-        android:layout_below="@id/txtFirstname"
         android:id="@+id/txtEmail"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -45,7 +44,7 @@
             android:text="Sign In!"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btnDialogEmail"
+            android:id="@+id/btnSignIn"
             android:height="50dp"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"

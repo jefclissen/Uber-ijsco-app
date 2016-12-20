@@ -6,17 +6,17 @@
     android:minWidth="300dp"
     android:minHeight="400dp">
     <EditText
-        android:id="@+id/txtFirstname"
+        android:id="@+id/txtUsername"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:hint="First Name"
+        android:hint="Username"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="25dp"
         android:textColor="#000" />
     <EditText
-        android:layout_below="@id/txtFirstname"
+        android:layout_below="@id/txtUsername"
         android:id="@+id/txtEmail"
         android:layout_width="match_parent"
         android:layout_height="50dp"

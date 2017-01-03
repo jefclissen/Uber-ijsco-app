@@ -79,6 +79,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountDialog.cs" />
     <Compile Include="HttpRequest.cs" />
     <Compile Include="LoginActivity.cs" />
     <Compile Include="MainAppActivity.cs" />
@@ -102,6 +103,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\Options.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\ChangeAccount.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

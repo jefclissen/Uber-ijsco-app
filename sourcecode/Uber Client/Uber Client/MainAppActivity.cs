@@ -24,6 +24,11 @@ namespace Uber_Client
         NameValueCollection mCredentials;
         private TextView txtInfo;
         public event EventHandler<EventArgs> Poll;
+
+        public int ETA = 0;
+        public int currentETA = 0;
+        Thread mThread;
+        public bool threadRunning = false;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -40,17 +45,20 @@ namespace Uber_Client
             mBtnAccount.Click += MBtnAccount_Click;
             txtInfo = FindViewById<TextView>(Resource.Id.txtInfo);
             Poll += MainAppActivity_Poll;
+
+            ThreadStart TS = new ThreadStart(Polling);
+            mThread = new Thread(TS);
         }
 
 
 
-        private  void MBtnIceCream_Click(object sender, EventArgs e)
+        private void MBtnIceCream_Click(object sender, EventArgs e)
         {
-            ThreadStart TS = new ThreadStart(Polling);
-            Thread mThread = new Thread(TS);
-            mThread.Start();
-
-            txtInfo.Text = "TEST";
+            if (!threadRunning) { 
+                
+                mThread.Start();
+            }
+            #region
             /*
             var locator = CrossGeolocator.Current;
             locator.DesiredAccuracy = 50;
@@ -68,6 +76,8 @@ namespace Uber_Client
             httpReq.mRequestCompleted += HttpReq_mRequestCompleted;
             */
             ///*
+            #endregion
+
             var locator = CrossGeolocator.Current;
             locator.DesiredAccuracy = 50;
 
@@ -113,25 +123,55 @@ private void HttpReq_mRequestCompleted(object sender, RequestEventArgs e)
             string result;
             using (WebClient client = new WebClient())
             {
-                Uri uri = new Uri("http://35.165.103.236:80/getinfo");
+                Uri uri = new Uri("http://35.165.103.236:80/geteta");
                 NameValueCollection parameters = new NameValueCollection();
                 parameters.Add("useremail", mCredentials.Get("email"));
 
                 byte[] response = client.UploadValues(uri, parameters);
                 result = System.Text.Encoding.UTF8.GetString(response);
+                if(result.Substring(0,1) == "0")
+                {
+                    RunOnUiThread(() => {
+                        txtInfo.Text = result.Substring(1);
+                    });
+                }else
+                {
+                    if(Convert.ToInt16(result) != ETA)
+                    {
+                        ETA = Convert.ToInt16(result); //set ETA
+                        RunOnUiThread(() => {
+                            txtInfo.Text = result.ToString();
+                        });
+                        currentETA = ETA;
+                    }else if(currentETA > 0)
+                    {
+                        currentETA--;
+                        
+                        RunOnUiThread(() => {
+                            txtInfo.Text = (currentETA/60).ToString() + "min";
+                        });
+                    }else
+                    {
+                        RunOnUiThread(() => {
+                            txtInfo.Text = "The deliverer will arrive soon";
+                        });
+                    }
+
+                }
             }
-            RunOnUiThread(() => {
-                txtInfo.Text = result;
-            });
+            
         }
 
         private void MBtnAccount_Click(object sender, EventArgs e)
         {
+           // mThread.Abort();
+            
             var intent = new Intent(this, typeof(OptionsActivity));
             intent.PutExtra("username", mCredentials.Get("username"));
             intent.PutExtra("email", mCredentials.Get("email"));
             intent.PutExtra("password", mCredentials.Get("password"));
             StartActivity(intent);
+
         }
     } 
 }

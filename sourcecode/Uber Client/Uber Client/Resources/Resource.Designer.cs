@@ -66,77 +66,89 @@ namespace Uber_Client
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050005
-			public const int AccountBtn = 2131034117;
-			
-			// aapt resource value: 0x7f050015
-			public const int AccountSettingsBtn = 2131034133;
-			
-			// aapt resource value: 0x7f050006
-			public const int IceCreamBtn = 2131034118;
-			
-			// aapt resource value: 0x7f050017
-			public const int btnDialogEmail = 2131034135;
-			
-			// aapt resource value: 0x7f050001
-			public const int btnSignIn = 2131034113;
-			
-			// aapt resource value: 0x7f050003
-			public const int btnSignUp = 2131034115;
-			
-			// aapt resource value: 0x7f050004
-			public const int progressBar1 = 2131034116;
-			
-			// aapt resource value: 0x7f050008
-			public const int txtAccount = 2131034120;
-			
-			// aapt resource value: 0x7f050011
-			public const int txtCardHolder = 2131034129;
-			
-			// aapt resource value: 0x7f050000
-			public const int txtCreateAccount = 2131034112;
-			
-			// aapt resource value: 0x7f05000f
-			public const int txtCreditcardNumber = 2131034127;
-			
-			// aapt resource value: 0x7f050009
-			public const int txtEmail = 2131034121;
-			
-			// aapt resource value: 0x7f050007
-			public const int txtInfo = 2131034119;
-			
-			// aapt resource value: 0x7f050012
-			public const int txtMyCardHolder = 2131034130;
-			
-			// aapt resource value: 0x7f050010
-			public const int txtMyCreditcardNumberAndCVC = 2131034128;
-			
-			// aapt resource value: 0x7f05000a
-			public const int txtMyEmail = 2131034122;
+			// aapt resource value: 0x7f050014
+			public const int AccountBtn = 2131034132;
 			
 			// aapt resource value: 0x7f05000e
-			public const int txtMyPhoneNumber = 2131034126;
+			public const int AccountSave = 2131034126;
 			
-			// aapt resource value: 0x7f05000c
-			public const int txtMyUsername = 2131034124;
+			// aapt resource value: 0x7f050019
+			public const int AccountSettingsBtn = 2131034137;
 			
-			// aapt resource value: 0x7f050014
-			public const int txtMyZipCode = 2131034132;
+			// aapt resource value: 0x7f050015
+			public const int IceCreamBtn = 2131034133;
 			
-			// aapt resource value: 0x7f050002
-			public const int txtOr = 2131034114;
+			// aapt resource value: 0x7f05001b
+			public const int btnDialogEmail = 2131034139;
 			
-			// aapt resource value: 0x7f050016
-			public const int txtPassword = 2131034134;
+			// aapt resource value: 0x7f050010
+			public const int btnSignIn = 2131034128;
 			
-			// aapt resource value: 0x7f05000d
-			public const int txtPhoneNumber = 2131034125;
-			
-			// aapt resource value: 0x7f05000b
-			public const int txtUsername = 2131034123;
+			// aapt resource value: 0x7f050012
+			public const int btnSignUp = 2131034130;
 			
 			// aapt resource value: 0x7f050013
-			public const int txtZipCode = 2131034131;
+			public const int progressBar1 = 2131034131;
+			
+			// aapt resource value: 0x7f050017
+			public const int txtAccount = 2131034135;
+			
+			// aapt resource value: 0x7f05000a
+			public const int txtCardHolder = 2131034122;
+			
+			// aapt resource value: 0x7f05000f
+			public const int txtCreateAccount = 2131034127;
+			
+			// aapt resource value: 0x7f050008
+			public const int txtCreditcardNumber = 2131034120;
+			
+			// aapt resource value: 0x7f050000
+			public const int txtEmail = 2131034112;
+			
+			// aapt resource value: 0x7f050016
+			public const int txtInfo = 2131034134;
+			
+			// aapt resource value: 0x7f05000b
+			public const int txtMyCardHolder = 2131034123;
+			
+			// aapt resource value: 0x7f050009
+			public const int txtMyCreditCardNumber = 2131034121;
+			
+			// aapt resource value: 0x7f050018
+			public const int txtMyCreditcardNumberAndCVC = 2131034136;
+			
+			// aapt resource value: 0x7f050001
+			public const int txtMyEmail = 2131034113;
+			
+			// aapt resource value: 0x7f050005
+			public const int txtMyPassword = 2131034117;
+			
+			// aapt resource value: 0x7f050006
+			public const int txtMyPassword2 = 2131034118;
+			
+			// aapt resource value: 0x7f050007
+			public const int txtMyPhoneNumber = 2131034119;
+			
+			// aapt resource value: 0x7f050003
+			public const int txtMyUsername = 2131034115;
+			
+			// aapt resource value: 0x7f05000d
+			public const int txtMyZipCode = 2131034125;
+			
+			// aapt resource value: 0x7f050011
+			public const int txtOr = 2131034129;
+			
+			// aapt resource value: 0x7f05001a
+			public const int txtPassword = 2131034138;
+			
+			// aapt resource value: 0x7f050004
+			public const int txtPhoneNumber = 2131034116;
+			
+			// aapt resource value: 0x7f050002
+			public const int txtUsername = 2131034114;
+			
+			// aapt resource value: 0x7f05000c
+			public const int txtZipCode = 2131034124;
 			
 			static Id()
 			{
@@ -152,19 +164,22 @@ namespace Uber_Client
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int Login = 2130903040;
+			public const int ChangeAccount = 2130903040;
 			
 			// aapt resource value: 0x7f030001
-			public const int MainApp = 2130903041;
+			public const int Login = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int Options = 2130903042;
+			public const int MainApp = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int SignInDialog = 2130903043;
+			public const int Options = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int SignUpDialog = 2130903044;
+			public const int SignInDialog = 2130903044;
+			
+			// aapt resource value: 0x7f030005
+			public const int SignUpDialog = 2130903045;
 			
 			static Layout()
 			{

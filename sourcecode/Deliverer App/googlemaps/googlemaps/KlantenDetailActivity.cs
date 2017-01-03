@@ -61,7 +61,7 @@ namespace googlemaps
             //data uit geaccepteerd
             dataService.klantBediend(geaccepteerdeKlanten[klantId]);
             Toast.MakeText(this, geaccepteerdeKlanten[klantId].Email, ToastLength.Long).Show();
-
+            
             string mResult;
             using (WebClient client = new WebClient())
             {
@@ -76,6 +76,8 @@ namespace googlemaps
                 byte[] response = client.UploadValues(uri, parameters);
                 mResult = System.Text.Encoding.UTF8.GetString(response);
             }
+
+
             //data in handeld klanten
             var intent = new Intent(this, typeof(MapActivity));
             StartActivity(intent);

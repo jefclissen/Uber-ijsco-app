@@ -43,6 +43,7 @@
     <Compile Include="Repository\RouteRepository.cs" />
     <Compile Include="Repository\SettingsRepository.cs" />
     <Compile Include="Service\KlantDataService.cs" />
+    <Compile Include="Service\RoutesDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

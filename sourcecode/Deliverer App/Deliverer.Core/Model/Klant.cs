@@ -14,7 +14,7 @@ namespace Deliverer.Core.Modle
         }
         public string Username
         {
-            get;set;
+            get; set;
         }
         public string Email
         {

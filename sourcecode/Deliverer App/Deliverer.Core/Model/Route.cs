@@ -16,6 +16,6 @@ namespace Deliverer.Core.Model
         public double end_address_lat { get; set; }
         public string start_address { get; set; }
         public double start_address_lat { get; set; }
-        public MyLatLng[,] points;
+        public MyLatLng[] steps;
     }
 }

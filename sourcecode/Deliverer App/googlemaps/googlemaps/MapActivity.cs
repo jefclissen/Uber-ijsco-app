@@ -16,6 +16,7 @@ using Deliverer.Core.Modle;
 using Plugin.Geolocator;
 using Android.Graphics;
 using static Android.Gms.Maps.GoogleMap;
+using Deliverer.Core.Model;
 
 namespace googlemaps
 {
@@ -23,13 +24,14 @@ namespace googlemaps
     public class MapActivity : Activity, IInfoWindowAdapter, IOnInfoWindowClickListener
     {
         private List<Klant> klanten;
+        private List<Route> routes;
         private MarkerOptions[] markers;
         private KlantDataService dataService;
+        private RoutesDataService routeDataService;
         private LatLng myPosition;
         private MarkerOptions myPositionMarker;
         private GoogleMap map;
         private List<LatLng> punten;
-        private List<Polyline> lijnen;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -44,7 +46,7 @@ namespace googlemaps
             }
             else
             {//als er geen klanten zijn terug naar mainmenu en toast meegeven
-                Toast.MakeText(this, "klanten zijn toegevoegd", ToastLength.Long).Show();
+                Toast.MakeText(this, "geen klanten geselecteerd", ToastLength.Long).Show();
                 var intent = new Intent(this, typeof(MainMenuActivity));
                 StartActivity(intent);
             }
@@ -68,37 +70,15 @@ namespace googlemaps
                 markers[i] = marker;
             }
         }
-        private async void getMyLocation()
-        {
-            myPosition = new LatLng(0, 0);
-            /*var locator = CrossGeolocator.Current;
-            locator.DesiredAccuracy = 50;
-
-            var position = await locator.GetPositionAsync(10000);
-
-            myPositionMarker.SetPosition(new LatLng(position.Latitude, position.Longitude));
-            myPositionMarker.SetTitle("mijn positie");*/
-
-
-        }
-
-
-        private void makeMap()
+        private async void makeMap()
         {
             SetContentView(Resource.Layout.MapView);
             MapFragment mapFrag = (MapFragment)FragmentManager.FindFragmentById(Resource.Id.map);
             map = mapFrag.Map;
 
-            /*Polyline line = map.AddPolyline(new PolylineOptions()
-     .Add(new LatLng(-120.2, 38.5), new LatLng(-120.95, 40.7)));
-            Polyline line2 = map.AddPolyline(new PolylineOptions()
-     .Add(new LatLng(-120.95, 40.7), new LatLng(-126.453, 43.252)));*/
-            // .Width(5)
-            // .Color(Color.Red));
 
-            // Polyline line = map.AddPolyline(new PolylineOptions().);
             punten = new List<LatLng>();
-            lijnen = new List<Polyline>();
+            /*
             punten.Add(new LatLng(51.37223, 4.47566));
             punten.Add(new LatLng(51.37164, 4.47443));
             punten.Add(new LatLng(51.37135, 4.47386));
@@ -111,21 +91,26 @@ namespace googlemaps
             punten.Add(new LatLng(51.36915, 4.47838));
             punten.Add(new LatLng(51.3691, 4.47843));
             punten.Add(new LatLng(51.36887, 4.47853));
-            punten.Add(new LatLng(51.36887, 4));
-
-            for (int i = 0; i < punten.Count()-1; i++)
+            punten.Add(new LatLng(51.36887, 4));*/
+            routeDataService = new RoutesDataService();
+            routes = routeDataService.GeefRoutes();
+            for (int i = 0; i < routes.Count; i++)
             {
-                //lijnen.Add(new Polyline();
-                Polyline line = map.AddPolyline(new PolylineOptions()
-     .Add(punten[i], punten[i+1]));
-            }  
-
+                for (int j = 0; j < routes[i].steps.Length - 1; j++)
+                {
+                    Polyline line = map.AddPolyline(new PolylineOptions()
+     .Add(new LatLng(routes[i].steps[j].latitude, routes[i].steps[j].longitude), new LatLng(routes[i].steps[j + 1].latitude, routes[i].steps[j + 1].longitude)));
+                    if (i % 2 == 0)
+                        line.Color = Color.Red;
+                    else
+                        line.Color = Color.Blue;
+                }
+            }
 
 
             if (map != null)
             {
                 map.MyLocationEnabled = true;
-                map.TrafficEnabled = true;
                 for (int i = 0; i < markers.Length; i++)
                 {
                     map.AddMarker(markers[i]);
@@ -133,38 +118,12 @@ namespace googlemaps
                     map.SetOnInfoWindowClickListener(this);
                     //map.SetInfoWindowAdapter(new CustomMarkerPopupAdapter(LayoutInflater));
                 }
-              //  map.MyLocationChange += Map_MyLocationChange;
-               
+                var locator = CrossGeolocator.Current;
+                locator.DesiredAccuracy = 50;
 
-                /*if(myPositionMarker != null)
-                {
-                    map.AddMarker(myPositionMarker); //zet huidige locatie op kaart
-                    zoomToLocation(myPositionMarker, map, 7);
-
-                }
-                else
-                {
-                    MarkerOptions marker = new MarkerOptions();
-                    marker.SetPosition(new LatLng(51.218999, 4.401556));
-                    zoomToLocation(marker, map, 20);
-                }
-                /*
-                if(markers == null || markers.Length ==0)
-                {
-                    MarkerOptions marker = new MarkerOptions();
-                    marker.SetPosition(new LatLng(51.218999, 4.401556));
-                    zoomToLocation(marker, map, 20);
-                }
-                else
-                {
-                    zoomToLocation(locmarkersaties[0], map, 7);
-                }*/
+                var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+                zoomToLocation(new LatLng(position.Latitude, position.Longitude), map, 15);
             }
-        }
-
-        private void Map_MyLocationChange(object sender, MyLocationChangeEventArgs e)
-        {
-         //   zoomToLocation(new LatLng(map.l,map.MyLocation.Longitude), map, 30);
         }
 
         private void zoomToLocation(LatLng locatie, GoogleMap map, int zoom)
@@ -204,13 +163,6 @@ namespace googlemaps
             var intent = new Intent(this, typeof(KlantenDetailActivity));
             intent.PutExtra("KlantenId", Convert.ToString(i));
             StartActivity(intent);
-        }
-    }
-
-    class KlantMareker {
-        public KlantMareker(Klant klant)
-        {
-
         }
     }
     /*

@@ -19,24 +19,11 @@ namespace Deliverer.Core.Repository
         private async void getKlantenFromServer()
         {
             WebRequest request = WebRequest.Create("http://35.165.103.236:80/unhandledclients"); 
-
-            // If required by the server, set the credentials.
             request.Credentials = CredentialCache.DefaultCredentials;
-
-            // Get the response.
             WebResponse response = await request.GetResponseAsync();
-
-            // Get the stream containing content returned by the server.
             Stream dataStream = response.GetResponseStream();
-
-            // Open the stream using a StreamReader for easy access.
             StreamReader reader = new StreamReader(dataStream);
-            // Read the content.
             string responseFromServer = reader.ReadToEnd();
-
-            // Display the content + deserialize json to location object
-            //Console.WriteLine(responseFromServer);
-            // List<Client> clientList = new List<Client>();
             klanten = JsonConvert.DeserializeObject<List<Klant>>(responseFromServer);
         }
         #endregion
@@ -83,29 +70,31 @@ namespace Deliverer.Core.Repository
         private List<Klant> geaccepteerdeKlanten;
         private List<Klant> gewijgerdeKlanten;
         
-        public async void pushGeaccepteerdeKlanten(List<Klant> klanten) //push klanten naar server
+        public void pushGeaccepteerdeKlanten(List<Klant> klanten) //push klanten naar server
         {
             geaccepteerdeKlanten = new List<Klant>();
             geaccepteerdeKlanten = klanten;
 
 
 
-            //hier code om klanten naar server te poucen
-           /* var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://35.165.103.236:80/helpclient");
+            //hier code om klanten naar server te poushen
+            /*
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://35.165.103.236:80/addclient");
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
-            using (var streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync()))
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
-                //string json = "{'name':'Pim','userLat':'4','userLong':'41}";
-                string json = "{\"name\":\'Pim\","+ "\"userLat\":\"4\"," + "\"userLong\":\"41\"}";
+                string json = "{\"username\":\"test\"," +
+                              "\"email\":\"test@test.be\"," +
+                              "\"password\":\"bla\"}";
 
                 streamWriter.Write(json);
                 streamWriter.Flush();
-                //streamWriter.Close();
+                streamWriter.Close();
             }
 
-            var httpResponse =  (HttpWebResponse)await httpWebRequest.GetResponseAsync();
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var result = streamReader.ReadToEnd();

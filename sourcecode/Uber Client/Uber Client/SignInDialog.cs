@@ -76,7 +76,7 @@ namespace Uber_Client
                 string mResult;
                 using (WebClient client = new WebClient())
                 {
-                    Uri uri = new Uri("http://35.165.103.236:80/clientlogin");
+                    Uri uri = new Uri("http://35.165.103.236:80/checkpassword");
                     NameValueCollection parameters = new NameValueCollection();
                     parameters.Add("email", mTxtEmail.Text);
                     parameters.Add("password", mTxtPassword.Text);

@@ -26,7 +26,6 @@
         android:textStyle="bold"
         android:textColor="@android:color/black" />
     <TextView
-        android:text="jefclissen@hotmail.com"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,7 +41,6 @@
         android:textStyle="bold"
         android:textColor="@android:color/black" />
     <TextView
-        android:text="jefclissen96"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

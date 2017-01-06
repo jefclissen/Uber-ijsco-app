@@ -13,7 +13,7 @@ using System.Collections.Specialized;
 
 namespace Uber_Client
 {
-    [Activity(Label = "LoginActivity", MainLauncher = true, Icon = "@drawable/icoon")]
+    [Activity(Label = "Uber Ijsco", MainLauncher = true, Icon = "@drawable/icoon")]
     public class LoginActivity : Activity
     {
         //SignUp Menu
@@ -46,9 +46,9 @@ namespace Uber_Client
         private void SignInDialog_mOnsignInComplete(object sender, OnSignInEventArgs e)
         {
             var intent = new Intent(this, typeof(MainAppActivity));
-            intent.PutExtra("username", mCredentials.Get("username"));
-            intent.PutExtra("email", mCredentials.Get("email"));
-            intent.PutExtra("password", mCredentials.Get("password"));
+            intent.PutExtra("username", mCredentials.Get("username"));//can be empty
+            intent.PutExtra("email", e.Email);
+            intent.PutExtra("password", e.Password);
             StartActivity(intent);
         }
 

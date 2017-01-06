@@ -29,6 +29,7 @@ namespace Uber_Client
         public int currentETA = 0;
         Thread mThread;
         public bool threadRunning = false;
+        public bool requestPending = false;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -54,9 +55,10 @@ namespace Uber_Client
 
         private void MBtnIceCream_Click(object sender, EventArgs e)
         {
-            if (!threadRunning) { 
-                
+            requestPending = true;
+            if (!threadRunning) {              
                 mThread.Start();
+                threadRunning = true;
             }
             #region
             /*
@@ -106,10 +108,14 @@ namespace Uber_Client
         private void Polling()
         {
             
-            //Toast.MakeText(this, "Thread running...", ToastLength.Long).Show();
+            //Toast.MakeText(this, "Thread started...", ToastLength.Long).Show();
             while (true) {
-                Poll.Invoke(this, new EventArgs());      
-                Thread.Sleep(1000);
+                if (requestPending) {
+                    Thread.Sleep(5000);
+                    Poll.Invoke(this, new EventArgs());
+                    
+                    //Toast.MakeText(this, "Thread running...", ToastLength.Long).Show();
+                }
             }
         }
         /*
@@ -134,7 +140,15 @@ private void HttpReq_mRequestCompleted(object sender, RequestEventArgs e)
                     RunOnUiThread(() => {
                         txtInfo.Text = result.Substring(1);
                     });
-                }else
+                }else if(result.Substring(0, 1) == "*") {
+                    //VERZOEK AFGEHANDELD
+                    requestPending = false;//stop polling for info
+                    //threadRunning = false;
+                    RunOnUiThread(() => {
+                        Toast.MakeText(this, result, ToastLength.Long).Show();
+                    });
+                }
+                else
                 {
                     if(Convert.ToInt16(result) != ETA)
                     {
@@ -164,12 +178,15 @@ private void HttpReq_mRequestCompleted(object sender, RequestEventArgs e)
 
         private void MBtnAccount_Click(object sender, EventArgs e)
         {
-           // mThread.Abort();
-            
-            var intent = new Intent(this, typeof(OptionsActivity));
+            // mThread.Abort();
+
+            //var intent = new Intent(this, typeof(OptionsActivity));
+            //OptionsActivity myOptionsActivity = new OptionsActivity(this);
+            Intent intent = new Intent(this,typeof(OptionsActivity));
             intent.PutExtra("username", mCredentials.Get("username"));
             intent.PutExtra("email", mCredentials.Get("email"));
             intent.PutExtra("password", mCredentials.Get("password"));
+            StartActivityForResult(intent, 1);
             StartActivity(intent);
 
         }

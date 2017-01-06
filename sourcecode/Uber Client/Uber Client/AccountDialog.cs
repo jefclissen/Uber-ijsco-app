@@ -15,12 +15,18 @@ namespace Uber_Client
     public class OnAccountChangeEventArgs : EventArgs
     {
         //event aanmaken overgeërfd van Event args zodat we deze argumenten kunnen broadcasten naar onze Account Activity
+        private string mOldPassword;
         private string mPassword;
         private string mPhone;
         private string mCreditCardNumber;
         private string mCardHolder;
         private string mZipCode;
-        public string Password
+        public string OldPassword
+        {
+            get { return mOldPassword; }
+            set { mOldPassword = value; }
+        }
+        public string NewPassword
         {
             get { return mPassword; }
             set { mPassword = value; }
@@ -47,9 +53,10 @@ namespace Uber_Client
         }
         
 
-        public OnAccountChangeEventArgs(string _password,string _phone, string _creditCardNumber, string _cardHolder, string _zipCode) : base()
+        public OnAccountChangeEventArgs(string _oldpassword,string _newpassword,string _phone, string _creditCardNumber, string _cardHolder, string _zipCode) : base()
         {
-            Password = _password;
+            OldPassword = _oldpassword;
+            NewPassword = _newpassword;
             Phone = _phone;
             CreditCardNumber = _creditCardNumber;
             Cardholder = _cardHolder;
@@ -60,7 +67,7 @@ namespace Uber_Client
     {
         private string mEmail, mUsername;
         private string mPrevPassword, mPrevPhone, mPrevCreditCardNumber, mPrevCardHolder, mPrevZipCode;
-        EditText mTxtPassword, mTxtPassword2,mTxtPhone,mTxtCreditCardNumber, mTxtCardHolder,mTxtZipCode;
+        EditText mTxtOldPassword, mTxtNewPassword, mTxtNewPassword2,mTxtPhone,mTxtCreditCardNumber, mTxtCardHolder,mTxtZipCode;
         TextView mTxtEmail, mTxtUsername;
         Button mBtnChangeAccount;
         Context Parent;
@@ -81,50 +88,67 @@ namespace Uber_Client
             base.OnCreateView(inflater, container, savedInstanceState);
 
             var view = inflater.Inflate(Resource.Layout.ChangeAccount, container, false);
-            mTxtPassword = view.FindViewById<EditText>(Resource.Id.txtMyPassword);
-            mTxtPassword2 = view.FindViewById<EditText>(Resource.Id.txtMyPassword2);
-            mTxtPhone = view.FindViewById<EditText>(Resource.Id.txtMyPhoneNumber);
-            mTxtCreditCardNumber = view.FindViewById<EditText>(Resource.Id.txtMyCreditCardNumber);
-            mTxtCardHolder = view.FindViewById<EditText>(Resource.Id.txtMyCardHolder);
-            mTxtZipCode = view.FindViewById<EditText>(Resource.Id.txtMyZipCode);
+            mTxtOldPassword             = view.FindViewById<EditText>(Resource.Id.txtMyOldPassword);
+            mTxtNewPassword             = view.FindViewById<EditText>(Resource.Id.txtMyNewPassword);
+            mTxtNewPassword2            = view.FindViewById<EditText>(Resource.Id.txtMyNewPassword2);
+            mTxtPhone                   = view.FindViewById<EditText>(Resource.Id.txtMyPhoneNumber);
+            mTxtCreditCardNumber        = view.FindViewById<EditText>(Resource.Id.txtMyCreditCardNumber);
+            mTxtCardHolder              = view.FindViewById<EditText>(Resource.Id.txtMyCardHolder);
+            mTxtZipCode                 = view.FindViewById<EditText>(Resource.Id.txtMyZipCode);
 
-            mTxtEmail = view.FindViewById<TextView>(Resource.Id.txtMyEmail);
-            mTxtUsername = view.FindViewById<TextView>(Resource.Id.txtMyEmail);
+            mTxtEmail                   = view.FindViewById<TextView>(Resource.Id.txtMyEmail);
+            mTxtUsername                = view.FindViewById<TextView>(Resource.Id.txtMyUsername);
         
-            mTxtEmail.Text = mEmail;
-            mTxtUsername.Text = mUsername;
-            mTxtPhone.Text = mPrevPhone;
-            mTxtCreditCardNumber.Text = mPrevCreditCardNumber;
-            mTxtCardHolder.Text = mPrevCardHolder;
-            mTxtZipCode.Text = mPrevZipCode;
+            mTxtEmail.Text              = mEmail;
+            mTxtUsername.Text           = mUsername;
+            mTxtPhone.Text              = mPrevPhone;
+            mTxtCreditCardNumber.Text   = mPrevCreditCardNumber;
+            mTxtCardHolder.Text         = mPrevCardHolder;
+            mTxtZipCode.Text            = mPrevZipCode;
 
-            mBtnChangeAccount = view.FindViewById<Button>(Resource.Id.AccountSave);
+            mBtnChangeAccount           = view.FindViewById<Button>(Resource.Id.AccountSave);
             mBtnChangeAccount.Click += MBtnChangeAccount_Click;
             return view;
         }
 
         private void MBtnChangeAccount_Click(object sender, EventArgs e)
         {
-            if (mTxtPassword.Text == mTxtPassword2.Text) {
-                if(mTxtPassword.Text == "")
+            if (mTxtNewPassword.Text == mTxtNewPassword2.Text) {
+                if (mTxtNewPassword.Text == "")
                 {
                     //PASSWORD NOT CHANGED -> use previous password
-                    mOnAccountChangeComplete.Invoke(this, new OnAccountChangeEventArgs(mPrevPassword,
-                                    mTxtPhone.Text,mTxtCreditCardNumber.Text,mTxtCardHolder.Text,mTxtZipCode.Text));
+                    mOnAccountChangeComplete.Invoke(this, new OnAccountChangeEventArgs(mPrevPassword, mPrevPassword,
+                                    mTxtPhone.Text, mTxtCreditCardNumber.Text, mTxtCardHolder.Text, mTxtZipCode.Text));
+                    this.Dismiss();
+                }
+                else if (mTxtOldPassword.Text == "")
+                {
+                    //PLEASE ENTER OLD PASSWORD 
+                    mTxtNewPassword.Text = "";
+                    mTxtNewPassword2.Text = "";
+                    Toast.MakeText(Parent, "please enter old password", ToastLength.Long).Show();
+                } else if(mTxtOldPassword.Text == mPrevPassword)
+                { 
+                    //PASSWORD CHANGED & OLD PASSWORD FILLED IN -> use new password
+                    mOnAccountChangeComplete.Invoke(this, new OnAccountChangeEventArgs(mPrevPassword,mTxtNewPassword.Text,
+                                    mTxtPhone.Text, mTxtCreditCardNumber.Text, mTxtCardHolder.Text, mTxtZipCode.Text));
                     this.Dismiss();
                 }else
                 {
-                    //PASSWORD CHANGED -> use new password
-                    mOnAccountChangeComplete.Invoke(this, new OnAccountChangeEventArgs(mTxtPassword.Text,
-                                    mTxtPhone.Text, mTxtCreditCardNumber.Text, mTxtCardHolder.Text, mTxtZipCode.Text));
-                    this.Dismiss();
+                    //OLD PASSWORD IS WRONG
+                    Toast.MakeText(Parent, "Old password invalid", ToastLength.Long).Show();
+                    mTxtOldPassword.Text = "";
+                    mTxtNewPassword.Text = "";
+                    mTxtNewPassword2.Text = "";
                 }
 
             }
             else
             {
-                mTxtPassword.Text = "";
-                mTxtPassword2.Text = "";
+                //NEW PASSWORDS DO NOT MATCH EACHOTHER
+                mTxtOldPassword.Text = "";
+                mTxtNewPassword.Text = "";
+                mTxtNewPassword2.Text = "";
                 Toast.MakeText(Parent, "passwords don't match", ToastLength.Long).Show();
             }
             

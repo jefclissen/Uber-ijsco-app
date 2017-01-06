@@ -46,7 +46,7 @@ namespace Uber_Client
     {
         private EditText mTxtUsername;
         private EditText mTxtEmail;
-        private EditText mTxtPassword;
+        private EditText mTxtPassword,mTxtPassword2;
         private Button mBtnSignUp;
         private TextView mtxtInfo;
 
@@ -61,6 +61,8 @@ namespace Uber_Client
             mTxtUsername = view.FindViewById<EditText>(Resource.Id.txtUsername);
             mTxtEmail = view.FindViewById<EditText>(Resource.Id.txtEmail);
             mTxtPassword = view.FindViewById<EditText>(Resource.Id.txtPassword);
+            mTxtPassword2 = view.FindViewById<EditText>(Resource.Id.txtPassword2);
+
             mtxtInfo = view.FindViewById<TextView>(Resource.Id.txtInfo);
             mtxtInfo.SetTextColor(Color.Red);
             mBtnSignUp = view.FindViewById<Button>(Resource.Id.btnDialogEmail);
@@ -70,33 +72,45 @@ namespace Uber_Client
 
         private void MBtnSignUp_Click(object sender, EventArgs e)
         {
-            if (mTxtUsername.Text != null && mTxtEmail.Text != null && mTxtPassword.Text != null)
+            if (mTxtUsername.Text != null && mTxtEmail.Text != null && mTxtPassword.Text != null && mTxtPassword2.Text != null)
             {
-                string mResult;
-                using (WebClient client = new WebClient())
-                {
+                if (mTxtPassword.Text == mTxtPassword2.Text) { 
+                    //PASSWORDS MATCH
+                    string mResult;
+                    using (WebClient client = new WebClient())
+                    {
 
-                    Uri uri = new Uri("http://35.165.103.236:80/addclient");
-                    NameValueCollection parameters = new NameValueCollection();
-                    parameters.Add("username", mTxtUsername.Text);
-                    parameters.Add("email", mTxtEmail.Text);
-                    parameters.Add("password", mTxtPassword.Text);
-                    byte[] response = client.UploadValues(uri, parameters);
-                    mResult = System.Text.Encoding.UTF8.GetString(response);
-                }
-                if (mResult.Substring(0, 1) == "1")//SUCCES
+                        Uri uri = new Uri("http://35.165.103.236:80/addclient");
+                        NameValueCollection parameters = new NameValueCollection();
+                        parameters.Add("username", mTxtUsername.Text);
+                        parameters.Add("email", mTxtEmail.Text);
+                        parameters.Add("password", mTxtPassword.Text);
+                        byte[] response = client.UploadValues(uri, parameters);
+                        mResult = System.Text.Encoding.UTF8.GetString(response);
+                    }
+                    if (mResult.Substring(0, 1) == "1")//SUCCES
+                    {
+                        mtxtInfo.Text = mResult.Substring(1);
+                        mOnsignUpComplete.Invoke(this, new OnSignUpEventArgs(mTxtUsername.Text, mTxtEmail.Text, mTxtPassword.Text));
+                        this.Dismiss();
+                    }
+                    else if (mResult.Substring(0, 1) == "0")//Failed to make account 
+                    {
+                        mtxtInfo.Text = mResult.Substring(1);
+                        mTxtEmail.Text = "";
+                    }
+                }else
                 {
-                    mtxtInfo.Text = mResult.Substring(1);
-                    mOnsignUpComplete.Invoke(this, new OnSignUpEventArgs(mTxtUsername.Text, mTxtEmail.Text, mTxtPassword.Text));
-                    this.Dismiss();
+                    //PASSWORDS DO NOT MATCH
+                    mTxtPassword.Text = "";
+                    mTxtPassword2.Text = "";
+                    mtxtInfo.Text = "Passwords do not match";
                 }
-                else if (mResult.Substring(0, 1) == "0")//Failed to make account 
-                {
-                    mtxtInfo.Text = mResult.Substring(1);
-                    mTxtEmail.Text = "";
-                }
-            }else
+            }
+            else
             {
+                mTxtPassword.Text = "";
+                mTxtPassword2.Text = "";
                 mtxtInfo.Text = "Gelieve alle velden in te vullen";
             }
 

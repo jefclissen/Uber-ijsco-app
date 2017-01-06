@@ -59,6 +59,10 @@ namespace Deliverer.Core.Repository
         public List<Klant> GeefAlleKlatenFromServer()
         {
             getKlantenFromServer(); //enkel gebruiken bij niet hardcode deel
+            /*using (WebClient wc = new WebClient())
+            {
+                var json = wc.DownloadString("url");
+            }*/
             return klanten;
         }
         #endregion
@@ -116,14 +120,28 @@ namespace Deliverer.Core.Repository
         }
         public List<Klant> getGeaccepteerdeKlanten()
         {
+            getGeaccepteerdeKlantenFromServer();
             //deze moeten niet van server gehaald worden
             //eventueel later een optie (om veiligheid in te bouwen)
             return geaccepteerdeKlanten;
         }
 
+        private async void getGeaccepteerdeKlantenFromServer()
+        {
+            geaccepteerdeKlanten = new List<Klant>();
+
+            WebRequest request = WebRequest.Create("http://35.165.103.236:80/inprogress");
+            request.Credentials = CredentialCache.DefaultCredentials;
+            WebResponse response = await request.GetResponseAsync();
+            Stream dataStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string responseFromServer = reader.ReadToEnd();
+            geaccepteerdeKlanten = JsonConvert.DeserializeObject<List<Klant>>(responseFromServer);
+        }
         public List<Klant> getGewijgerdeKlanten()
         {
-            if(gewijgerdeKlanten == null)
+            
+            if (gewijgerdeKlanten == null)
             {
                 gewijgerdeKlanten = new List<Klant>();
                 gewijgerdeKlanten.Add(new Klant()

@@ -95,6 +95,7 @@
     <Compile Include="MainApplication.cs" />
     <Compile Include="MainMenuActivity.cs" />
     <Compile Include="MapActivity.cs" />
+    <Compile Include="ThreadRunning.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

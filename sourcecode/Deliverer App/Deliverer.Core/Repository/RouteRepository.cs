@@ -16,6 +16,7 @@ namespace Deliverer.Core.Repository
 
         public void pushRoute(string response)
         {
+            routes.Clear();
             routes = JsonConvert.DeserializeObject<List<Route>>(response);
         }
 

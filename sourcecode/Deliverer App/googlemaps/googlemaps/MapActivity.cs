@@ -17,6 +17,9 @@ using Plugin.Geolocator;
 using Android.Graphics;
 using static Android.Gms.Maps.GoogleMap;
 using Deliverer.Core.Model;
+using System.Net;
+using System.IO;
+using System.Threading;
 
 namespace googlemaps
 {
@@ -24,18 +27,38 @@ namespace googlemaps
     public class MapActivity : Activity, IInfoWindowAdapter, IOnInfoWindowClickListener
     {
         private List<Klant> klanten;
+        private List<Klant> newKlaten;
         private List<Route> routes;
-        private MarkerOptions[] markers;
+        private List<MarkerOptions> markers;
+        private List<MarkerOptions> newMarkers;
         private KlantDataService dataService;
         private RoutesDataService routeDataService;
         private LatLng myPosition;
         private MarkerOptions myPositionMarker;
         private GoogleMap map;
         private List<LatLng> punten;
+        private Thread myThread;
+        private bool threadRunning = false;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
+            
+        }
+        protected override void OnResume()
+        {
+            base.OnResume();
+            /*
+            ThreadStart myThreadDelegate = new ThreadStart(th);
+            
+            myThread = new Thread(myThreadDelegate);*/
+            //threadRunning = true;
+            dataService = new KlantDataService();
+
+            ThreadStart myThreadDelegate = new ThreadStart(notificationThread);
+            myThread = new Thread(myThreadDelegate);
+            threadRunning = true;
+            myThread.Start();
 
             getKlanten();
             if (klanten != null)
@@ -43,6 +66,7 @@ namespace googlemaps
                 // getMyLocation();
                 makeMarkers();
                 makeMap();
+               // RunOnUiThread(() => th());
             }
             else
             {//als er geen klanten zijn terug naar mainmenu en toast meegeven
@@ -51,23 +75,139 @@ namespace googlemaps
                 StartActivity(intent);
             }
         }
+        public void notificationThread()
+        {
+            int aantalNieuweKlanten = 0;
+            int vorigAantalNieuweKlanten = 0;
 
+            List<Klant> serverKlanten = new List<Klant>();
+            List<Klant> geweigerdeKlanten = new List<Klant>();
+            KlantDataService dataService = new KlantDataService();
+
+            //while (threadRunning == true) //zorg voor een eeuwige lus
+            while (true) //zorg voor een eeuwige lus
+            {
+                if (threadRunning == true)
+                {
+                    Thread.Sleep(7000);
+                    serverKlanten = dataService.GeefAlleKlantenFromServer();
+                    geweigerdeKlanten = dataService.getGewijgerdeKlanten();
+
+                    aantalNieuweKlanten = serverKlanten.Count; //maximum aantal nieuwe klanten (gelijk aan server klanten)
+                    if (geweigerdeKlanten[0].Username != "XXXXGEENKLANTENXXXX")//wanneer er nog geen gewijgerde klanten zijn
+                    {
+                        for (int i = 0; i < serverKlanten.Count; i++)
+                        {
+                            for (int j = 0; j < geweigerdeKlanten.Count; j++)
+                            {
+                                if (serverKlanten == geweigerdeKlanten)//als bepaalde klant op de server == aan de reeds geweigerde klant
+                                    aantalNieuweKlanten--;  //wordt maximum aantal klanten verminderd met 1
+                            }
+                        }
+                    }
+
+                    if (aantalNieuweKlanten != 0 && aantalNieuweKlanten != vorigAantalNieuweKlanten)
+                    {
+                        vorigAantalNieuweKlanten++;
+                        //voor het maken van de klik event
+                        // When the user clicks the notification, SecondActivity will start up.
+                        Intent resultIntent = new Intent(this, typeof(AccepteerActivity));
+                        // Construct a back stack for cross-task navigation:
+                        TaskStackBuilder stackBuilder = TaskStackBuilder.Create(this);
+                        stackBuilder.AddParentStack(Java.Lang.Class.FromType(typeof(AccepteerActivity)));
+                        stackBuilder.AddNextIntent(resultIntent);
+                        // Create the PendingIntent with the back stack:            
+                        PendingIntent resultPendingIntent =
+                            stackBuilder.GetPendingIntent(0, PendingIntentFlags.UpdateCurrent);
+
+                       // Android.Net.Uri alarmSound = RingtoneManager.GetDefaultUri(RingtoneType.Notification);
+
+                        Notification.Builder builder = new Notification.Builder(this)
+                            .SetContentTitle("Nieuwe klanten")
+                            .SetContentText("Er zijn " + aantalNieuweKlanten + " nieuwe klanten")
+                            .SetAutoCancel(true)                    // Dismiss from the notif. area when clicked
+                            .SetContentIntent(resultPendingIntent)  // Start 2nd activity when the intent is clicked.
+                            .SetSmallIcon(Android.Resource.Drawable.IcDialogAlert)
+                          //  .SetSound(alarmSound)
+                        .SetVibrate(new long[] { 500, 500, 500, 500, 500 })
+                        .SetPriority(10);
+
+                        // Build the notification:
+                        Notification nieuweKlantNotification = builder.Build();
+
+
+
+                        // Get the notification manager:
+                        NotificationManager notificationManager =
+                            GetSystemService(Context.NotificationService) as NotificationManager;
+
+                        // Publish the notification:
+                        const int notificationId = 0;
+                        notificationManager.Notify(notificationId, nieuweKlantNotification);
+                    }
+                    
+                }
+            }
+        }
         public void getKlanten()
         {
-            KlantDataService dataService = new KlantDataService();
+            
             klanten = dataService.getGeaccepteerdeKlanten();
+            newKlaten = dataService.GeefAlleKlantenFromServer();
+
+            /*using (WebClient wc = new WebClient())
+            {
+                var newKlaten = wc.DownloadString("http://35.165.103.236:80/unhandledclients");
+            }*/
+
+           /* var request = WebRequest.Create("http://35.165.103.236:80/unhandledclients");
+            request.ContentType = "application/json; charset=utf-8";
+            //string text;
+            var response = (HttpWebResponse)request.GetResponse();
+
+            using (var sr = new StreamReader(response.GetResponseStream()))
+            {
+                newKlaten = sr.ReadToEnd();
+            }*/
+
         }
         public void makeMarkers()
         {
-            markers = new MarkerOptions[klanten.Count];
+            markers = new List<MarkerOptions>();
+
             for (int i = 0; i < klanten.Count; i++)
             {
-
                 MarkerOptions marker = new MarkerOptions();
                 marker.SetPosition(new LatLng(klanten[i].Latitude, klanten[i].Longitude));
-                marker.SetTitle(klanten[i].Username);
+                marker.SetTitle("behandel");
 
-                markers[i] = marker;
+                markers.Add(marker);
+            }
+            //nieuwe klanten marker
+            
+        }
+        private void th()
+        {
+            while (true)
+            {
+                Thread.Sleep(7000);
+                newKlaten.Clear();
+                newKlaten = dataService.GeefAlleKlantenFromServer();
+                newMarkers = new List<MarkerOptions>();
+                for (int i = 0; i < newKlaten.Count; i++)
+                {
+                    MarkerOptions marker = new MarkerOptions();
+                    marker.SetPosition(new LatLng(newKlaten[i].Latitude + 1, newKlaten[i].Longitude + 1));
+                    marker.SetTitle("new");
+
+                    newMarkers.Add(marker);
+                }
+                for (int i = 0; i < newMarkers.Count; i++)
+                {
+                    map.AddMarker(newMarkers[i]);
+                    map.SetInfoWindowAdapter(this);
+                    map.SetOnInfoWindowClickListener(this);
+                }
             }
         }
         private async void makeMap()
@@ -76,22 +216,34 @@ namespace googlemaps
             MapFragment mapFrag = (MapFragment)FragmentManager.FindFragmentById(Resource.Id.map);
             map = mapFrag.Map;
 
+            maakRoute();
 
-            punten = new List<LatLng>();
-            /*
-            punten.Add(new LatLng(51.37223, 4.47566));
-            punten.Add(new LatLng(51.37164, 4.47443));
-            punten.Add(new LatLng(51.37135, 4.47386));
-            punten.Add(new LatLng(51.37098, 4.47303));
-            punten.Add(new LatLng(51.37098, 4.47303));
-            punten.Add(new LatLng(51.3706, 4.47411));
-            punten.Add(new LatLng(51.36993, 4.47607));
-            punten.Add(new LatLng(51.36927, 4.47816));
-            punten.Add(new LatLng(51.3692, 4.47831));
-            punten.Add(new LatLng(51.36915, 4.47838));
-            punten.Add(new LatLng(51.3691, 4.47843));
-            punten.Add(new LatLng(51.36887, 4.47853));
-            punten.Add(new LatLng(51.36887, 4));*/
+
+            if (map != null)
+            {
+                map.MyLocationEnabled = true;
+                for (int i = 0; i < markers.Count; i++)
+                {
+                    map.AddMarker(markers[i]);
+                    map.SetInfoWindowAdapter(this);
+                    map.SetOnInfoWindowClickListener(this);
+                    //map.SetInfoWindowAdapter(new CustomMarkerPopupAdapter(LayoutInflater));
+                }
+                
+
+
+                var locator = CrossGeolocator.Current;
+                locator.DesiredAccuracy = 50;
+
+                var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+                zoomToLocation(new LatLng(position.Latitude, position.Longitude), map, 15);
+
+             //  myThread.Start();
+            }
+        }
+
+        private void maakRoute()
+        {
             routeDataService = new RoutesDataService();
             routes = routeDataService.GeefRoutes();
             for (int i = 0; i < routes.Count; i++)
@@ -105,24 +257,6 @@ namespace googlemaps
                     else
                         line.Color = Color.Blue;
                 }
-            }
-
-
-            if (map != null)
-            {
-                map.MyLocationEnabled = true;
-                for (int i = 0; i < markers.Length; i++)
-                {
-                    map.AddMarker(markers[i]);
-                    map.SetInfoWindowAdapter(this);
-                    map.SetOnInfoWindowClickListener(this);
-                    //map.SetInfoWindowAdapter(new CustomMarkerPopupAdapter(LayoutInflater));
-                }
-                var locator = CrossGeolocator.Current;
-                locator.DesiredAccuracy = 50;
-
-                var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
-                zoomToLocation(new LatLng(position.Latitude, position.Longitude), map, 15);
             }
         }
 
@@ -144,59 +278,22 @@ namespace googlemaps
             int i = Convert.ToInt16(s);
 
             View view = LayoutInflater.Inflate(Resource.Layout.CustomMarkerLayout, null, false);
-            view.FindViewById<TextView>(Resource.Id.naamTextView).Text = (string)klanten[i].Username;
+            if(marker.Title == "behandel")
+                view.FindViewById<TextView>(Resource.Id.naamTextView).Text = (string)klanten[i].Username;
+            else
+                view.FindViewById<TextView>(Resource.Id.naamTextView).Text = (string)newKlaten[i].Username;
             //view.FindViewById<Button>(Resource.Id.bedienButton).Click += MapActivity_Click;
             return view;
         }
-
-        /*private void MapActivity_Click(object sender, EventArgs e)
-        {
-            //data uit geacpeteerd zetten
-            klanten.Remove(klanten[e])
-            //data in handeld zetten
-        }*/
-
         public void OnInfoWindowClick(Marker marker)
         {
             string s = marker.Id.Substring(1);
             int i = Convert.ToInt16(s);
+
             var intent = new Intent(this, typeof(KlantenDetailActivity));
-            intent.PutExtra("KlantenId", Convert.ToString(i));
+            //intent.PutExtra("KlantenId", Convert.ToString(i));
+            intent.PutExtra("email", klanten[i].Email);
             StartActivity(intent);
         }
     }
-    /*
-    public class CustomMarkerPopupAdapter : Java.Lang.Object, GoogleMap.IInfoWindowAdapter
-    {
-        private LayoutInflater _layoutInflater = null;
-
-        public CustomMarkerPopupAdapter(LayoutInflater inflater)
-        {
-            _layoutInflater = inflater;
-        }
-
-        public View GetInfoWindow(Marker marker)
-        {
-            return null;
-        }
-
-        public View GetInfoContents(Marker marker)
-        {
-            var customPopup = _layoutInflater.Inflate(Resource.Layout.CustomMarkerPopup, null);
-
-            TextView titleTextView = customPopup.FindViewById<TextView>(Resource.Id.custom_marker_popup_title);
-            if (titleTextView != null)
-            {
-                titleTextView.Text = "info";
-            }
-
-            TextView snippetTextView = customPopup.FindViewById<TextView>(Resource.Id.custom_marker_popup_snippet);
-            if (snippetTextView != null)
-            {
-                snippetTextView.Text = "snipit";
-            }
-
-            return customPopup;
-        }
-    }*/
 }

@@ -13,6 +13,8 @@ using Deliverer.Core.Modle;
 using Deliverer.Core.Service;
 using System.Net;
 using System.Collections.Specialized;
+using System.IO;
+using Plugin.Geolocator;
 
 namespace googlemaps
 {
@@ -20,48 +22,60 @@ namespace googlemaps
     public class KlantenDetailActivity : Activity
     {
         private List<Klant> geaccepteerdeKlanten;
-        private Klant klant;
+        private List<Klant> klant;
         private TextView naamKlantTextView;
         private Button bediendButton;
-        private int klantId;
+        //private int klantId;
+        private string email;
 
         private KlantDataService dataService;
+        private RoutesDataService routeDataService;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.KlantDetailActivity);
 
             dataService = new KlantDataService();
-            geaccepteerdeKlanten = new List<Klant>();
-            klant = new Klant();
+            routeDataService = new RoutesDataService();
 
-            string k = Intent.GetStringExtra("KlantenId");
-            klantId = Convert.ToInt32(k);
+            geaccepteerdeKlanten = new List<Klant>();
+            klant = new List<Klant>();
+
+            email = Intent.GetStringExtra("email");
+            //klantId = Convert.ToInt32(k);
 
             GetKlant();
             FindViews();
             FillViews();
             // Create your application here
         }
+        
 
         private void GetKlant()
         {
             geaccepteerdeKlanten = dataService.getGeaccepteerdeKlanten();
-            klant = geaccepteerdeKlanten[klantId];
+            //klant = geaccepteerdeKlanten[klantId];
+            /*var kkkk = from k in geaccepteerdeKlanten
+                    where k.Email == email
+                    select k;*/
+            //klant = (Object) kkkk;
+            //klant = ee;
+
+             klant = geaccepteerdeKlanten.Where(k => k.Email == email).ToList();
         }
 
         private void FillViews()
         {
-            naamKlantTextView.Text = klant.Username;
+            naamKlantTextView.Text = klant[0].Username;
             bediendButton.Click += BediendButton_Click;
         }
 
-        private void BediendButton_Click(object sender, EventArgs e)
+        private async void BediendButton_Click(object sender, EventArgs e)
         {
             //data uit geaccepteerd
-            dataService.klantBediend(geaccepteerdeKlanten[klantId]);
-            Toast.MakeText(this, geaccepteerdeKlanten[klantId].Email, ToastLength.Long).Show();
-            
+            dataService.klantBediend(klant[0]);
+
+            /*
             string mResult;
             using (WebClient client = new WebClient())
             {
@@ -72,15 +86,50 @@ namespace googlemaps
                // parameters.Add("username", geaccepteerdeKlanten[klantId].Username);
                // parameters.Add("userLong", Convert.ToString(geaccepteerdeKlanten[klantId].Longitude));
                // parameters.Add("userLat", Convert.ToString(geaccepteerdeKlanten[klantId].Latitude));
-                parameters.Add("email", geaccepteerdeKlanten[klantId].Email);
+                parameters.Add("email", klant[0].Email);
                 byte[] response = client.UploadValues(uri, parameters);
                 mResult = System.Text.Encoding.UTF8.GetString(response);
-            }
+            }*/
 
+            var locator = CrossGeolocator.Current;
+            locator.DesiredAccuracy = 50;
+
+            var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://35.165.103.236:80/doneclient");
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                string json = "{\"driveremail\":\"robbe@driver.com\"," +
+                    "\"driverLat\":\"" + position.Latitude.ToString().Replace(',', '.') + "\"," +
+                                  "\"driverLong\":\"" + position.Longitude.ToString().Replace(',', '.') + "\"," +
+                                 "\"useremail\":\"" + klant[0].Email + "\"}";
+                              
+
+                streamWriter.Write(json);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+            
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd();
+                routeDataService.pushRoute(result);
+            }
+            
+            /*
+            dataService.pushGeaccepteerdeKlanten(geaccepteerdeKlanten);
+            Toast.MakeText(this, "klanten zijn toegevoegd", ToastLength.Long).Show();
+            var intent = new Intent(this, typeof(MapActivity));
+            StartActivity(intent);*/
 
             //data in handeld klanten
+            Toast.MakeText(this, klant[0].Email, ToastLength.Long).Show();
             var intent = new Intent(this, typeof(MapActivity));
             StartActivity(intent);
+
         }
 
         private void FindViews()

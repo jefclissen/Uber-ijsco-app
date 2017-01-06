@@ -85,50 +85,56 @@ namespace googlemaps
                }]
            }
            */
-
-            var locator = CrossGeolocator.Current;
-            locator.DesiredAccuracy = 50;
-
-            var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
-
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://35.165.103.236:80/helpclient");
-            httpWebRequest.ContentType = "application/json";
-            httpWebRequest.Method = "POST";
-
-            string userString = "[";
-            for (int i = 0; i < geaccepteerdeKlanten.Count; i++)
+            if (geaccepteerdeKlanten.Count != 0)
             {
-                userString += "{\"useremail\":\"" + geaccepteerdeKlanten[i].Email + "\"," +
-                              "\"userLat\":\"" + geaccepteerdeKlanten[i].Latitude.ToString().Replace(',','.') + "\"," +
-                              "\"userLong\":\"" + geaccepteerdeKlanten[i].Longitude.ToString().Replace(',', '.') + "\"}";
-                if (i != geaccepteerdeKlanten.Count - 1)
-                    userString += ",";
+                var locator = CrossGeolocator.Current;
+                locator.DesiredAccuracy = 50;
+
+                var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://35.165.103.236:80/helpclient");
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "POST";
+
+                string userString = "[";
+                for (int i = 0; i < geaccepteerdeKlanten.Count; i++)
+                {
+                    userString += "{\"useremail\":\"" + geaccepteerdeKlanten[i].Email + "\"," +
+                                  "\"userLat\":\"" + geaccepteerdeKlanten[i].Latitude.ToString().Replace(',', '.') + "\"," +
+                                  "\"userLong\":\"" + geaccepteerdeKlanten[i].Longitude.ToString().Replace(',', '.') + "\"}";
+                    if (i != geaccepteerdeKlanten.Count - 1)
+                        userString += ",";
+                }
+                userString += "]";
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    string json = "{\"driveremail\":\"robbe@driver.com\"," +
+                                  "\"driverLat\":\"" + position.Latitude.ToString().Replace(',', '.') + "\"," +
+                                  "\"driverLong\":\"" + position.Longitude.ToString().Replace(',', '.') + "\"," +
+                                  "\"users\":" + userString + "}";
+
+                    streamWriter.Write(json);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+                    routeDataService.pushRoute(result);
+                }
+
+
+                //dataService.pushGeaccepteerdeKlanten(geaccepteerdeKlanten);
+                Toast.MakeText(this, "klanten zijn toegevoegd", ToastLength.Long).Show();
+                var intent = new Intent(this, typeof(MapActivity));
+                StartActivity(intent);
             }
-            userString += "]";
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            else
             {
-                string json = "{\"driveremail\":\"robbe@driver.com\"," +
-                              "\"driverLat\":\"" + position.Latitude.ToString().Replace(',', '.') + "\"," +
-                              "\"driverLong\":\"" + position.Longitude.ToString().Replace(',', '.') + "\"," +
-                              "\"users\":" + userString + "}";
-
-                streamWriter.Write(json);
-                streamWriter.Flush();
-                streamWriter.Close();
+                Toast.MakeText(this, "gelieve klanten te selecteren", ToastLength.Long).Show();
             }
-
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var result = streamReader.ReadToEnd();
-                routeDataService.pushRoute(result);
-            }
-
-
-            dataService.pushGeaccepteerdeKlanten(geaccepteerdeKlanten);
-            Toast.MakeText(this, "klanten zijn toegevoegd", ToastLength.Long).Show();
-            var intent = new Intent(this, typeof(MapActivity));
-            StartActivity(intent);
         }
 
 
@@ -146,12 +152,32 @@ namespace googlemaps
 
             for (int i = 0; i < serverKlanten.Count; i++)
             {
-                naamKlanten.Add(serverKlanten[i].Username);
+                naamKlanten.Add(serverKlanten[i].Username +" "+ Math.Round(afstand(serverKlanten[i].Latitude,serverKlanten[i].Longitude, 51.332490, 4.375370),2) + "km");
                 klantenHelper[i] = false;
             }
             ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItemMultipleChoice, naamKlanten);
             klantenlijst.Adapter = adapter;
             klantenlijst.ChoiceMode = ChoiceMode.Multiple;
+        }
+        private double afstand(double lat1, double lon1, double lat2, double lon2)
+        {
+
+            var R = 6371; // Radius of the earth in km
+            var dLat = deg2rad(lat2 - lat1);  // deg2rad below
+            var dLon = deg2rad(lon2 - lon1);
+            var a =
+              Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+              Math.Cos(deg2rad(lat1)) * Math.Cos(deg2rad(lat2)) *
+              Math.Sin(dLon / 2) * Math.Sin(dLon / 2)
+              ;
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            var d = R * c; // Distance in km
+            return d;
+        }
+
+        double deg2rad(double deg)
+        {
+            return deg * (Math.PI / 180);
         }
         private void FindViews()
         {

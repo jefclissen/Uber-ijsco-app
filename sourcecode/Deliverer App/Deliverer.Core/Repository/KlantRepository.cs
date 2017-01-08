@@ -71,13 +71,16 @@ namespace Deliverer.Core.Repository
 
 
         #region geaccepteerde klanten
-        private List<Klant> geaccepteerdeKlanten;
+        private List<Klant> geaccepteerdeKlanten = new List<Klant>();
         private List<Klant> gewijgerdeKlanten;
         
         public void pushGeaccepteerdeKlanten(List<Klant> klanten) //push klanten naar server
         {
-            geaccepteerdeKlanten = new List<Klant>();
-            geaccepteerdeKlanten = klanten;
+           // geaccepteerdeKlanten = new List<Klant>();
+            for (int i = 0; i < klanten.Count; i++)
+            {
+                geaccepteerdeKlanten.Add(klanten[i]);
+            } 
 
 
 
@@ -120,7 +123,7 @@ namespace Deliverer.Core.Repository
         }
         public List<Klant> getGeaccepteerdeKlanten()
         {
-            getGeaccepteerdeKlantenFromServer();
+            //getGeaccepteerdeKlantenFromServer();
             //deze moeten niet van server gehaald worden
             //eventueel later een optie (om veiligheid in te bouwen)
             return geaccepteerdeKlanten;

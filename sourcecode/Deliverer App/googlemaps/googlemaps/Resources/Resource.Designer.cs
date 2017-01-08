@@ -331,8 +331,8 @@ namespace googlemaps
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f070014
-			public const int aanvragenButton = 2131165204;
+			// aapt resource value: 0x7f070016
+			public const int aanvragenButton = 2131165206;
 			
 			// aapt resource value: 0x7f07000e
 			public const int accepteerButton = 2131165198;
@@ -346,8 +346,11 @@ namespace googlemaps
 			// aapt resource value: 0x7f07000a
 			public const int auto = 2131165194;
 			
-			// aapt resource value: 0x7f070011
-			public const int bediendButton = 2131165201;
+			// aapt resource value: 0x7f070013
+			public const int bediendButton = 2131165203;
+			
+			// aapt resource value: 0x7f070010
+			public const int behandelButton = 2131165200;
 			
 			// aapt resource value: 0x7f07000b
 			public const int dark = 2131165195;
@@ -364,14 +367,17 @@ namespace googlemaps
 			// aapt resource value: 0x7f07000c
 			public const int light = 2131165196;
 			
+			// aapt resource value: 0x7f070014
+			public const int map = 2131165204;
+			
+			// aapt resource value: 0x7f070015
+			public const int mapButton = 2131165205;
+			
 			// aapt resource value: 0x7f070012
-			public const int map = 2131165202;
+			public const int naamKlantTextView = 2131165202;
 			
-			// aapt resource value: 0x7f070013
-			public const int mapButton = 2131165203;
-			
-			// aapt resource value: 0x7f070010
-			public const int naamKlantTextView = 2131165200;
+			// aapt resource value: 0x7f070011
+			public const int naamNieuweKlant = 2131165201;
 			
 			// aapt resource value: 0x7f07000f
 			public const int naamTextView = 2131165199;
@@ -430,19 +436,22 @@ namespace googlemaps
 			public const int CustomMarkerLayout = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int KlantDetailActivity = 2130903042;
+			public const int KlantAccepterenLayout = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int Main = 2130903043;
+			public const int KlantDetailActivity = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int MainMenuLayout = 2130903044;
+			public const int Main = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int MapView = 2130903045;
+			public const int MainMenuLayout = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int settingsLayout = 2130903046;
+			public const int MapView = 2130903046;
+			
+			// aapt resource value: 0x7f030007
+			public const int settingsLayout = 2130903047;
 			
 			static Layout()
 			{

@@ -28,5 +28,10 @@ namespace Deliverer.Core.Modle
         public double Latitude { 
             get;set;
         }
+        public int markerID
+        {
+            get;set;
+        }
+        
     }
 }

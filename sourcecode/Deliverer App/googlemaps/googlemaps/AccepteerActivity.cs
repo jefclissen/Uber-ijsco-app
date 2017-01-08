@@ -16,6 +16,7 @@ using System.Net;
 using System.Collections.Specialized;
 using System.IO;
 using Plugin.Geolocator;
+using Newtonsoft.Json;
 
 namespace googlemaps
 {
@@ -37,11 +38,16 @@ namespace googlemaps
         {
             base.OnCreate(savedInstanceState);
 
+            
+        }
+        protected override void OnResume()
+        {
+            base.OnResume();
             SetContentView(Resource.Layout.AccepteerLayout);
             dataService = new KlantDataService();
             routeDataService = new RoutesDataService();
 
-            FindViews();         
+            FindViews();
             VulLijst();
             HandleEvents();
         }
@@ -87,6 +93,8 @@ namespace googlemaps
            */
             if (geaccepteerdeKlanten.Count != 0)
             {
+                dataService.pushGeaccepteerdeKlanten(geaccepteerdeKlanten);
+
                 var locator = CrossGeolocator.Current;
                 locator.DesiredAccuracy = 50;
 
@@ -122,6 +130,7 @@ namespace googlemaps
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
+                    
                     routeDataService.pushRoute(result);
                 }
 
@@ -145,8 +154,12 @@ namespace googlemaps
         private void VulLijst()
         {
 
-            serverKlanten = dataService.GeefAlleKlantenFromServer();
-
+            //serverKlanten = dataService.GeefAlleKlantenFromServer();
+            using (WebClient wc = new WebClient())
+            {
+                var json = wc.DownloadString("http://35.165.103.236:80/unhandledclients");
+                serverKlanten = JsonConvert.DeserializeObject<List<Klant>>(json);
+            }
             naamKlanten = new List<string>();
             klantenHelper = new bool[serverKlanten.Count];
 

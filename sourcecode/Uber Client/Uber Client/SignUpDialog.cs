@@ -97,7 +97,10 @@ namespace Uber_Client
                     else if (mResult.Substring(0, 1) == "0")//Failed to make account 
                     {
                         mtxtInfo.Text = mResult.Substring(1);
+                        mTxtUsername.Text = "";
                         mTxtEmail.Text = "";
+                        mTxtPassword.Text = "";
+                        mTxtPassword2.Text = "";
                     }
                 }else
                 {

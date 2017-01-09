@@ -7,6 +7,7 @@
     android:minHeight="400dp">
     <EditText
         android:id="@+id/txtEmail"
+        android:inputType="textEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="Email"

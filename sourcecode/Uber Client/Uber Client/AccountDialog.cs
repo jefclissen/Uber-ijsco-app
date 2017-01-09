@@ -68,7 +68,7 @@ namespace Uber_Client
         private string mEmail, mUsername;
         private string mPrevPassword, mPrevPhone, mPrevCreditCardNumber, mPrevCardHolder, mPrevZipCode;
         EditText mTxtOldPassword, mTxtNewPassword, mTxtNewPassword2,mTxtPhone,mTxtCreditCardNumber, mTxtCardHolder,mTxtZipCode;
-        TextView mTxtEmail, mTxtUsername;
+        TextView mTxtUsername;
         Button mBtnChangeAccount;
         Context Parent;
         public event EventHandler<OnAccountChangeEventArgs> mOnAccountChangeComplete;
@@ -96,10 +96,10 @@ namespace Uber_Client
             mTxtCardHolder              = view.FindViewById<EditText>(Resource.Id.txtMyCardHolder);
             mTxtZipCode                 = view.FindViewById<EditText>(Resource.Id.txtMyZipCode);
 
-            mTxtEmail                   = view.FindViewById<TextView>(Resource.Id.txtMyEmail);
+            //mTxtEmail                   = view.FindViewById<TextView>(Resource.Id.txtMyEmail);
             mTxtUsername                = view.FindViewById<TextView>(Resource.Id.txtMyUsername);
         
-            mTxtEmail.Text              = mEmail;
+            //mTxtEmail.Text              = mEmail;
             mTxtUsername.Text           = mUsername;
             mTxtPhone.Text              = mPrevPhone;
             mTxtCreditCardNumber.Text   = mPrevCreditCardNumber;
@@ -152,6 +152,12 @@ namespace Uber_Client
                 Toast.MakeText(Parent, "passwords don't match", ToastLength.Long).Show();
             }
             
+        }
+
+        public override void OnActivityCreated(Bundle savedInstanceState)
+        {
+            Dialog.Window.RequestFeature(WindowFeatures.NoTitle);
+            base.OnActivityCreated(savedInstanceState);
         }
     }
 }

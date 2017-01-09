@@ -41,16 +41,19 @@ namespace Uber_Client
     {
         private EditText mTxtEmail;
         private string mEmailFromSignUp;
+        private string mPasswordFromSignUp;
         private EditText mTxtPassword;
         private Button mBtnSignIn;
         private TextView mtxtInfo;
         public event EventHandler<OnSignInEventArgs> mOnsignInComplete; //public so others can subscribe to this event
 
-        public SignInDialog(string _email)
+        public SignInDialog(string _email,string _password)
         {
             if (_email != null) {
                 mEmailFromSignUp = _email;
+                mPasswordFromSignUp = _password;
             }
+            
             
         }
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -60,10 +63,13 @@ namespace Uber_Client
             var view = inflater.Inflate(Resource.Layout.SignInDialog, container, false);
             
             mTxtEmail = view.FindViewById<EditText>(Resource.Id.txtEmail);
-            mTxtEmail.Text = mEmailFromSignUp;
             mTxtPassword = view.FindViewById<EditText>(Resource.Id.txtPassword);
+            mTxtEmail.Text = mEmailFromSignUp;
+            mTxtPassword.Text = mPasswordFromSignUp;
+
             mtxtInfo = view.FindViewById<TextView>(Resource.Id.txtInfo);
             mtxtInfo.SetTextColor(Color.Red);
+
             mBtnSignIn = view.FindViewById<Button>(Resource.Id.btnSignIn);
             mBtnSignIn.Click += MBtnSignIn_Click;
             return view;

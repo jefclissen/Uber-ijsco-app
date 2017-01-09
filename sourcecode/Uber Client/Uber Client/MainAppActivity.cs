@@ -13,10 +13,12 @@ using System.Collections.Specialized;
 using System.Net;
 using Plugin.Geolocator;
 using System.Threading;
+using Android.Content.PM;
+using Android.Media;
 
 namespace Uber_Client
 {
-    [Activity(Label = "MainAppActivity")]
+    [Activity(Label = "MainAppActivity", ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainAppActivity : Activity
     {
         private Button mBtnIceCream;
@@ -30,9 +32,12 @@ namespace Uber_Client
         Thread mThread;
         public bool threadRunning = false;
         public bool requestPending = false;
+        public bool sentNotification = false;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(savedInstanceState);
+
             SetContentView(Resource.Layout.MainApp);
             mCredentials = new NameValueCollection();
 
@@ -53,13 +58,9 @@ namespace Uber_Client
 
 
 
-        private void MBtnIceCream_Click(object sender, EventArgs e)
+        private async void MBtnIceCream_Click(object sender, EventArgs e)
         {
-            requestPending = true;
-            if (!threadRunning) {              
-                mThread.Start();
-                threadRunning = true;
-            }
+            
             #region
             /*
             var locator = CrossGeolocator.Current;
@@ -82,9 +83,12 @@ namespace Uber_Client
 
             var locator = CrossGeolocator.Current;
             locator.DesiredAccuracy = 50;
+            
+           
+            var position = await locator.GetPositionAsync(timeoutMilliseconds: 20000);
+            Toast.MakeText(this, "Got location, sending now...", ToastLength.Long).Show();
 
-            //var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
-            //string Long = position.Longitude.ToString().Replace(',', '.');
+            string Long = position.Longitude.ToString().Replace(',', '.');
 
             string mResult;
             using (WebClient client = new WebClient())
@@ -93,16 +97,22 @@ namespace Uber_Client
                 NameValueCollection parameters = new NameValueCollection();
                 parameters.Add("email", mCredentials.Get("email"));
                 parameters.Add("username", mCredentials.Get("username"));
-                //parameters.Add("userLong", position.Longitude.ToString().Replace(',', '.'));
-                //parameters.Add("userLat", position.Latitude.ToString().Replace(',', '.'));
-                parameters.Add("userLong", "4.4164027");
-                parameters.Add("userLat", "51.2298936");
+                parameters.Add("userLong", position.Longitude.ToString().Replace(',', '.'));
+                parameters.Add("userLat", position.Latitude.ToString().Replace(',', '.'));
+                //parameters.Add("userLong", "4.4164027");
+                //parameters.Add("userLat", "51.2298936");
                 byte[] response = client.UploadValues(uri, parameters);
                 mResult = System.Text.Encoding.UTF8.GetString(response);
             }
-             
+
             Toast.MakeText(this, mResult, ToastLength.Long).Show();
-            //*/
+
+            requestPending = true;
+            if (!threadRunning)
+            {
+                mThread.Start();
+                threadRunning = true;
+            }
         }
 
         private void Polling()
@@ -150,25 +160,70 @@ private void HttpReq_mRequestCompleted(object sender, RequestEventArgs e)
                 }
                 else
                 {
-                    if(Convert.ToInt16(result) != ETA)
+                    if (Convert.ToInt16(result) != ETA)
                     {
+                        sentNotification = false;
                         ETA = Convert.ToInt16(result); //set ETA
-                        RunOnUiThread(() => {
+                        RunOnUiThread(() =>
+                        {
                             txtInfo.Text = result.ToString();
                         });
                         currentETA = ETA;
-                    }else if(currentETA > 0)
+                    }
+                    else if (currentETA > 60)
                     {
                         currentETA--;
-                        
-                        RunOnUiThread(() => {
-                            txtInfo.Text = (currentETA/60).ToString() + "min";
+
+                        RunOnUiThread(() =>
+                        {
+                            txtInfo.Text = (currentETA / 60).ToString() + "min";
                         });
-                    }else
+
+                    }
+                    else
                     {
-                        RunOnUiThread(() => {
+                        RunOnUiThread(() =>
+                        {
                             txtInfo.Text = "The deliverer will arrive soon";
                         });
+                        if (!sentNotification)
+                        {
+                            sentNotification = true;
+
+                            Intent resultIntent = new Intent(this, typeof(MainAppActivity));
+                            // Construct a back stack for cross-task navigation:
+                            TaskStackBuilder stackBuilder = TaskStackBuilder.Create(this);
+                            stackBuilder.AddParentStack(Java.Lang.Class.FromType(typeof(MainAppActivity)));
+                            stackBuilder.AddNextIntent(resultIntent);
+                            // Create the PendingIntent with the back stack:            
+                            PendingIntent resultPendingIntent =
+                                stackBuilder.GetPendingIntent(0, PendingIntentFlags.UpdateCurrent);
+
+                            Android.Net.Uri alarmSound = RingtoneManager.GetDefaultUri(RingtoneType.Notification);
+
+                            Notification.Builder builder = new Notification.Builder(this)
+                                .SetContentTitle("Uber Ijsco")
+                                .SetContentText("Your Deliverer will arrive shortly")
+                                .SetAutoCancel(true)                    // Dismiss from the notif. area when clicked
+                                .SetContentIntent(resultPendingIntent)  // Start 2nd activity when the intent is clicked.
+                                .SetSmallIcon(Android.Resource.Drawable.IcDialogAlert)
+                              .SetSound(alarmSound)
+                            .SetVibrate(new long[] { 500, 500, 500, 500, 500 })
+                            .SetPriority(10);
+
+                            // Build the notification:
+                            Notification driverCloseNotificiation = builder.Build();
+
+
+
+                            // Get the notification manager:
+                            NotificationManager notificationManager =
+                                GetSystemService(Context.NotificationService) as NotificationManager;
+
+                            // Publish the notification:
+                            const int notificationId = 0;
+                            notificationManager.Notify(notificationId, driverCloseNotificiation);
+                        }
                     }
 
                 }
@@ -183,12 +238,13 @@ private void HttpReq_mRequestCompleted(object sender, RequestEventArgs e)
             //var intent = new Intent(this, typeof(OptionsActivity));
             //OptionsActivity myOptionsActivity = new OptionsActivity(this);
             Intent intent = new Intent(this,typeof(OptionsActivity));
-            intent.PutExtra("username", mCredentials.Get("username"));
+            //intent.PutExtra("username", mCredentials.Get("username"));
             intent.PutExtra("email", mCredentials.Get("email"));
             intent.PutExtra("password", mCredentials.Get("password"));
             StartActivityForResult(intent, 1);
             StartActivity(intent);
 
         }
+
     } 
 }

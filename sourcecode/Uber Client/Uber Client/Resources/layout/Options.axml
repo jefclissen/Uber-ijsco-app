@@ -8,16 +8,6 @@
     android:background="@android:color/background_light"
     android:padding="10dp">
     <TextView
-        android:text="My Account"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtAccount"
-        android:textSize="25dp"
-        android:gravity="center"
-        android:paddingBottom="10sp"
-        android:textColor="@android:color/black" />
-    <TextView
         android:text="Email"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"

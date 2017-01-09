@@ -20,18 +20,16 @@
         android:layout_marginLeft="10dp" />
     <Button
         android:id="@+id/IceCreamBtn"
-        android:text="GiveMeIceCream!"
         android:layout_height="0dp"
         android:layout_weight="20"
-        android:layout_width="match_parent"
+        android:layout_width="105dp"
         android:textSize="25sp"
         android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp" />
+        android:background="@drawable/icoon"
+        android:layout_gravity="center_horizontal" />
     <TextView
         android:id="@+id/txtInfo"
         android:layout_below="@+id/IceCreamBtn"
-        android:text="ETA: 5min 20sec"
         android:layout_height="0dp"
         android:layout_weight="20"
         android:layout_width="match_parent"

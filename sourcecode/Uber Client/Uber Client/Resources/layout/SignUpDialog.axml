@@ -17,6 +17,7 @@
         android:textColor="#000" />
     <EditText
         android:layout_below="@id/txtUsername"
+        android:inputType="textEmailAddress"
         android:id="@+id/txtEmail"
         android:layout_width="match_parent"
         android:layout_height="50dp"

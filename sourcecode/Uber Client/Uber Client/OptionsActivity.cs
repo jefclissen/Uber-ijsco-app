@@ -13,10 +13,11 @@ using System.Collections.Specialized;
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Android.Content.PM;
 
 namespace Uber_Client
 {
-    [Activity(Label = "OptionsActivity")]
+    [Activity(Label = "My Account", ScreenOrientation = ScreenOrientation.Portrait)]
     public class OptionsActivity : Activity
     {
         NameValueCollection mCredentials;
@@ -24,6 +25,7 @@ namespace Uber_Client
         Button btnChangeAccount;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(savedInstanceState);
             mCredentials = new NameValueCollection();
             mCredentials.Add("username", Intent.GetStringExtra("username"));//Get the data passed by previous Activity
@@ -42,24 +44,28 @@ namespace Uber_Client
 
             txtMyEmail.Text = mCredentials.Get("email");
             txtMyUsername.Text = mCredentials.Get("username");
-            
+
             GetDataFromDB();
         }
+        #region ONSTOP
 
-        protected override void OnStop()
-        {
-            
-            Intent myIntent = new Intent(this, typeof(MainAppActivity));
-            myIntent.PutExtra("password", mCredentials.Get("password"));
-            SetResult(Result.Ok, myIntent);
-            Finish();
-            base.OnStop();
-            
-        }
+            /*
+            protected override void OnStop()
+            {
+                //STUURT AANGEPAST PASSWORD DOOR NAAR MAIN ACTIVITY
+                Intent myIntent = new Intent(this, typeof(MainAppActivity));
+                myIntent.PutExtra("password", mCredentials.Get("password"));
+                SetResult(Result.Ok, myIntent);
+                Finish();
+                base.OnStop();
+
+            }
+            */
+            #endregion
         private void BtnChangeAccount_Click(object sender, EventArgs e)
         {
             FragmentTransaction trans = FragmentManager.BeginTransaction();
-            AccountDialog accountDialog = new AccountDialog(this,mCredentials.Get("password"), mCredentials.Get("email"), mCredentials.Get("username"),
+            AccountDialog accountDialog = new AccountDialog(this,mCredentials.Get("password"), mCredentials.Get("email"), txtMyUsername.Text,
                 txtMyPhoneNumber.Text, txtMyCreditcardNumber.Text, txtMyCardHolder.Text, txtMyZipcode.Text);
 
             accountDialog.Show(trans, "dialog fragment");
@@ -91,7 +97,6 @@ namespace Uber_Client
                 //GET NEW PASSWORD FROM DIALOG
                 mCredentials.Set("password", e.NewPassword);
 
-                //TRIGGER EVENT FOR MAINACTIVITY ?? TO PASS DATA BACK
                 GetDataFromDB();
             }
         }

@@ -39,7 +39,7 @@ Deze stappen moet je volgen na het opstarten van de app:
 6. om een nieuwe klant te behandelen druk je op de marker, nu zal er meer informatie over de klant tevoorschijn komen. Druk daarna op de label en de accepteer activity zal openen. hier kan je de klant(en) aanduiden die je wil behandelen.
 
 ##Client App
-Code van de werkende Client app bevind zich sourcecode/Uber Client. (deliverer-app is een mislukte versie)
+Code van de werkende Client app bevind zich sourcecode/Uber Client.
 
 Om de app te gebruiken/testen hebben je een account nodig, dit kan ja aanmaken door op de Sign Up knop te klikken. Vervolgens druk je  op de Sign in knop om verder te gaan.
 Om een Ijsjecokar te bestellen druk je op het logo in de App, dit zal een request sturen naar de Server.

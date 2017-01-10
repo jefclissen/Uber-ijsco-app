@@ -17,7 +17,7 @@ using Android.Media;
 
 namespace googlemaps
 {
-    [Activity(Label = "MainMenuActivity", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "MainMenuActivity", MainLauncher = false, Icon = "@drawable/icon")]
     public class MainMenuActivity : Activity
     {
         private Button mapButton;

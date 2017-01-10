@@ -15,9 +15,4 @@
         android:gravity="center"
         android:layout_marginBottom="10dp"
         android:textColor="#000" />
-    <Button
-        android:text="Behandel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/behandelButton" />
 </LinearLayout>

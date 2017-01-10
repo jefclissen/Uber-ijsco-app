@@ -96,6 +96,7 @@
     <Compile Include="AccepteerActivity.cs" />
     <Compile Include="KlantAccepterenActivity.cs" />
     <Compile Include="KlantenDetailActivity.cs" />
+    <Compile Include="LoginActivity.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="MainMenuActivity.cs" />
@@ -128,6 +129,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\KlantAccepterenLayout.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\LoginLayout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

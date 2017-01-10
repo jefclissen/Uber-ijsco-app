@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Model\Gebruiker.cs" />
     <Compile Include="Model\Klant.cs" />
     <Compile Include="Model\MyLatLng.cs" />
     <Compile Include="Model\Settings.cs" />

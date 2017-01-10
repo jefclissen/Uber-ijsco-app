@@ -75,22 +75,6 @@ namespace googlemaps
             //data uit geaccepteerd
             dataService.klantBediend(klant[0]);
 
-            /*
-            string mResult;
-            using (WebClient client = new WebClient())
-            {
-
-                //Uri uri = new Uri("http://35.165.103.236:80/clientlogin");
-                string uri = "http://35.165.103.236:80/doneclient";
-                NameValueCollection parameters = new NameValueCollection();
-               // parameters.Add("username", geaccepteerdeKlanten[klantId].Username);
-               // parameters.Add("userLong", Convert.ToString(geaccepteerdeKlanten[klantId].Longitude));
-               // parameters.Add("userLat", Convert.ToString(geaccepteerdeKlanten[klantId].Latitude));
-                parameters.Add("email", klant[0].Email);
-                byte[] response = client.UploadValues(uri, parameters);
-                mResult = System.Text.Encoding.UTF8.GetString(response);
-            }*/
-
             var locator = CrossGeolocator.Current;
             locator.DesiredAccuracy = 50;
 
@@ -118,18 +102,9 @@ namespace googlemaps
                 var result = streamReader.ReadToEnd();
                 routeDataService.pushRoute(result);
             }
-            
-            /*
-            dataService.pushGeaccepteerdeKlanten(geaccepteerdeKlanten);
-            Toast.MakeText(this, "klanten zijn toegevoegd", ToastLength.Long).Show();
-            var intent = new Intent(this, typeof(MapActivity));
-            StartActivity(intent);*/
-
-            //data in handeld klanten
-            Toast.MakeText(this, klant[0].Email, ToastLength.Long).Show();
+            Toast.MakeText(this, klant[0].Username + " is behandeld" , ToastLength.Long).Show();
             var intent = new Intent(this, typeof(MapActivity));
             StartActivity(intent);
-
         }
 
         private void FindViews()

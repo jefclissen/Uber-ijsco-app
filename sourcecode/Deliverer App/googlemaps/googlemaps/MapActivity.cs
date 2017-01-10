@@ -40,13 +40,12 @@ namespace googlemaps
         private GoogleMap map;
         private List<LatLng> punten;
         private Thread myThread;
+        private Thread notificationThread;
         private bool threadRunning = false;
         private string geklikteKlant;
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(savedInstanceState);
-
-            
+            base.OnCreate(savedInstanceState); 
         }
         protected override void OnResume()
         {
@@ -55,30 +54,33 @@ namespace googlemaps
             ThreadStart myThreadDelegate = new ThreadStart(zoekNieuweKlanten);  
             myThread = new Thread(myThreadDelegate);
 
+            ThreadStart notificationThreadDelegate = new ThreadStart(notificationThreadFunctie);
+            notificationThread = new Thread(notificationThreadDelegate);
+
             dataService = new KlantDataService();
 
-            /*
-            ThreadStart myThreadDelegate = new ThreadStart(notificationThread);
-            myThread = new Thread(myThreadDelegate);
-            threadRunning = true;
-            myThread.Start();
-            */
             getKlanten();
             if (klanten != null)
             {
-                // getMyLocation();
                 makeMarkers();
                 makeMap();
                 myThread.Start();
+                threadRunning = true;
+                notificationThread.Start();
             }
             else
-            {//als er geen klanten zijn terug naar mainmenu en toast meegeven
+            {
                 Toast.MakeText(this, "geen klanten geselecteerd", ToastLength.Long).Show();
                 var intent = new Intent(this, typeof(MainMenuActivity));
                 StartActivity(intent);
             }
         }
-        public void notificationThread()
+        protected override void OnPause()
+        {
+            base.OnPause();
+           
+        }
+        public void notificationThreadFunctie()
         {
             int aantalNieuweKlanten = 0;
             int vorigAantalNieuweKlanten = 0;
@@ -93,7 +95,12 @@ namespace googlemaps
                 if (threadRunning == true)
                 {
                     Thread.Sleep(7000);
-                    serverKlanten = dataService.GeefAlleKlantenFromServer();
+                    using (WebClient wc = new WebClient())
+                    {
+                        var json = wc.DownloadString("http://35.165.103.236:80/unhandledclients");
+                        serverKlanten = JsonConvert.DeserializeObject<List<Klant>>(json);
+                    }
+                    //serverKlanten = dataService.GeefAlleKlantenFromServer();
                     geweigerdeKlanten = dataService.getGewijgerdeKlanten();
 
                     aantalNieuweKlanten = serverKlanten.Count; //maximum aantal nieuwe klanten (gelijk aan server klanten)
@@ -123,7 +130,7 @@ namespace googlemaps
                         PendingIntent resultPendingIntent =
                             stackBuilder.GetPendingIntent(0, PendingIntentFlags.UpdateCurrent);
 
-                       // Android.Net.Uri alarmSound = RingtoneManager.GetDefaultUri(RingtoneType.Notification);
+                        Android.Net.Uri alarmSound = Android.Media.RingtoneManager.GetDefaultUri(Android.Media.RingtoneType.Notification);
 
                         Notification.Builder builder = new Notification.Builder(this)
                             .SetContentTitle("Nieuwe klanten")
@@ -131,7 +138,7 @@ namespace googlemaps
                             .SetAutoCancel(true)                    // Dismiss from the notif. area when clicked
                             .SetContentIntent(resultPendingIntent)  // Start 2nd activity when the intent is clicked.
                             .SetSmallIcon(Android.Resource.Drawable.IcDialogAlert)
-                          //  .SetSound(alarmSound)
+                            .SetSound(alarmSound)
                         .SetVibrate(new long[] { 500, 500, 500, 500, 500 })
                         .SetPriority(10);
 
@@ -154,12 +161,6 @@ namespace googlemaps
         }
         public void getKlanten()
         {
-            /*
-            using (WebClient wc = new WebClient())
-            {
-                var json = wc.DownloadString("http://35.165.103.236:80/inprogress");
-                klanten = JsonConvert.DeserializeObject<List<Klant>>(json);
-            }*/
             klanten = dataService.getGeaccepteerdeKlanten();
         }
         public void makeMarkers()
@@ -294,22 +295,16 @@ namespace googlemaps
             int i = Convert.ToInt16(s);
 
             View view;
-            Button behandelButton;
             if (marker.Title == "behandel")
             {
-                
                 view = LayoutInflater.Inflate(Resource.Layout.CustomMarkerLayout, null, false);
-                //view.FindViewById<Button>(Resource.Id.bediendButton).Click += BehandelButton_Click;
                 view.FindViewById<TextView>(Resource.Id.naamTextView).Text = (string)klanten[i].Username;
-                //geklikteKlant = klanten[i].Email;
-               // behandelButton.Click += BehandelButton_Click;
             }
             else
             {
                 view = LayoutInflater.Inflate(Resource.Layout.CustomMarkerLayout, null, false);
                 view.FindViewById<TextView>(Resource.Id.naamTextView).Text = (string)unhandeledKlaten[i - klanten.Count].Username;
             }
-            //view.FindViewById<Button>(Resource.Id.bedienButton).Click += MapActivity_Click;
             return view;
         }
 
@@ -378,8 +373,8 @@ namespace googlemaps
         {
             string s = marker.Id.Substring(1);
             int i = Convert.ToInt16(s);
-            
-            
+
+
             if (marker.Title == "behandel")
             {
                 var intent = new Intent(this, typeof(KlantenDetailActivity));
@@ -388,18 +383,10 @@ namespace googlemaps
             }
             else
             {
-                /*
-                var intent = new Intent(this, typeof(KlantAccepterenActivity));
-                intent.PutExtra("email", unhandeledKlaten[i - klanten.Count].Email);*/
                 var intent = new Intent(this, typeof(AccepteerActivity));
 
                 StartActivity(intent);
             }
-            //var intent = new Intent(this, typeof(KlantenDetailActivity));
-            //intent.PutExtra("KlantenId", Convert.ToString(i));
-           // intent.PutExtra("email", klanten[i].Email);
-            //StartActivity(intent);
-            
         }
     }
 }

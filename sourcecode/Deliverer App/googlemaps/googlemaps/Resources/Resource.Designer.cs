@@ -331,8 +331,8 @@ namespace googlemaps
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f070016
-			public const int aanvragenButton = 2131165206;
+			// aapt resource value: 0x7f07001a
+			public const int aanvragenButton = 2131165210;
 			
 			// aapt resource value: 0x7f07000e
 			public const int accepteerButton = 2131165198;
@@ -346,14 +346,14 @@ namespace googlemaps
 			// aapt resource value: 0x7f07000a
 			public const int auto = 2131165194;
 			
-			// aapt resource value: 0x7f070013
-			public const int bediendButton = 2131165203;
-			
-			// aapt resource value: 0x7f070010
-			public const int behandelButton = 2131165200;
+			// aapt resource value: 0x7f070012
+			public const int bediendButton = 2131165202;
 			
 			// aapt resource value: 0x7f07000b
 			public const int dark = 2131165195;
+			
+			// aapt resource value: 0x7f070014
+			public const int emailInput = 2131165204;
 			
 			// aapt resource value: 0x7f070000
 			public const int hybrid = 2131165184;
@@ -361,23 +361,26 @@ namespace googlemaps
 			// aapt resource value: 0x7f070007
 			public const int icon_only = 2131165191;
 			
+			// aapt resource value: 0x7f070017
+			public const int inlogButton = 2131165207;
+			
 			// aapt resource value: 0x7f07000d
 			public const int klantenListView = 2131165197;
 			
 			// aapt resource value: 0x7f07000c
 			public const int light = 2131165196;
 			
-			// aapt resource value: 0x7f070014
-			public const int map = 2131165204;
+			// aapt resource value: 0x7f070018
+			public const int map = 2131165208;
 			
-			// aapt resource value: 0x7f070015
-			public const int mapButton = 2131165205;
-			
-			// aapt resource value: 0x7f070012
-			public const int naamKlantTextView = 2131165202;
+			// aapt resource value: 0x7f070019
+			public const int mapButton = 2131165209;
 			
 			// aapt resource value: 0x7f070011
-			public const int naamNieuweKlant = 2131165201;
+			public const int naamKlantTextView = 2131165201;
+			
+			// aapt resource value: 0x7f070010
+			public const int naamNieuweKlant = 2131165200;
 			
 			// aapt resource value: 0x7f07000f
 			public const int naamTextView = 2131165199;
@@ -388,6 +391,9 @@ namespace googlemaps
 			// aapt resource value: 0x7f070002
 			public const int normal = 2131165186;
 			
+			// aapt resource value: 0x7f070016
+			public const int paswoordInput = 2131165206;
+			
 			// aapt resource value: 0x7f070003
 			public const int satellite = 2131165187;
 			
@@ -396,6 +402,12 @@ namespace googlemaps
 			
 			// aapt resource value: 0x7f070004
 			public const int terrain = 2131165188;
+			
+			// aapt resource value: 0x7f070013
+			public const int textView1 = 2131165203;
+			
+			// aapt resource value: 0x7f070015
+			public const int textView2 = 2131165205;
 			
 			// aapt resource value: 0x7f070009
 			public const int wide = 2131165193;
@@ -442,16 +454,19 @@ namespace googlemaps
 			public const int KlantDetailActivity = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int Main = 2130903044;
+			public const int LoginLayout = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int MainMenuLayout = 2130903045;
+			public const int Main = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int MapView = 2130903046;
+			public const int MainMenuLayout = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int settingsLayout = 2130903047;
+			public const int MapView = 2130903047;
+			
+			// aapt resource value: 0x7f030008
+			public const int settingsLayout = 2130903048;
 			
 			static Layout()
 			{

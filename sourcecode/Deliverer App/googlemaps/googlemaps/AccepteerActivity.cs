@@ -37,8 +37,6 @@ namespace googlemaps
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
-            
         }
         protected override void OnResume()
         {
@@ -98,7 +96,7 @@ namespace googlemaps
                 var locator = CrossGeolocator.Current;
                 locator.DesiredAccuracy = 50;
 
-                var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+                var position = await locator.GetPositionAsync(timeoutMilliseconds: 20000);
 
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://35.165.103.236:80/helpclient");
                 httpWebRequest.ContentType = "application/json";
@@ -151,7 +149,7 @@ namespace googlemaps
         {
             klantenHelper[e.Position] = !klantenHelper[e.Position];
         }
-        private void VulLijst()
+        private async void VulLijst()
         {
 
             //serverKlanten = dataService.GeefAlleKlantenFromServer();
@@ -163,9 +161,14 @@ namespace googlemaps
             naamKlanten = new List<string>();
             klantenHelper = new bool[serverKlanten.Count];
 
+            var locator = CrossGeolocator.Current;
+            locator.DesiredAccuracy = 50;
+
+            var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+
             for (int i = 0; i < serverKlanten.Count; i++)
             {
-                naamKlanten.Add(serverKlanten[i].Username +" "+ Math.Round(afstand(serverKlanten[i].Latitude,serverKlanten[i].Longitude, 51.332490, 4.375370),2) + "km");
+                naamKlanten.Add(serverKlanten[i].Username +" "+ Math.Round(afstand(serverKlanten[i].Latitude,serverKlanten[i].Longitude, position.Latitude, position.Longitude),2) + "km");
                 klantenHelper[i] = false;
             }
             ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItemMultipleChoice, naamKlanten);

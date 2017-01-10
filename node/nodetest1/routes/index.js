@@ -8,7 +8,7 @@ var debug = true;
 
 //POSTCOMMANDS
 router.post('/addclient', function (req, res) {
-    if(debug == true){
+    if (debug == true) {
         console.log(req.body);
     }
     // Set our internal DB variable
@@ -27,11 +27,11 @@ router.post('/addclient', function (req, res) {
 
     // Search email in userlist
     userlist_collection.find({
-        "Username":username
-    },{},function(e, docs){
-        if(docs != ""){
+        "Username": username
+    }, {}, function (e, docs) {
+        if (docs != "") {
             res.send("0This username is allready in use");
-        }else{
+        } else {
             userlist_collection.find({
                 "Email": email
             }, {}, function (e, docs) {
@@ -64,10 +64,10 @@ router.post('/addclient', function (req, res) {
                 }
             });
         }
-    });    
+    });
 });
 router.post('/updatecredentials', function (req, res) {
-    if(debug == true){
+    if (debug == true) {
         console.log(req.body);
     }
     var db = req.db;
@@ -101,7 +101,7 @@ router.post('/updatecredentials', function (req, res) {
     res.send("1Credentials aangepast");
 });
 router.post('/adddriver', function (req, res) {
-    if(debug == true){
+    if (debug == true) {
         console.log(req.body);
     }
     // Set our internal DB variable
@@ -117,7 +117,7 @@ router.post('/adddriver', function (req, res) {
     var driverlist_collection = db.get('driverlist');
 
     // Submit to the DB
-    
+
     driverlist_collection.find({
         "DriverName": username,
         "DriverEmail": email,
@@ -147,7 +147,7 @@ router.post('/adddriver', function (req, res) {
 
 });
 router.post('/icecreamrequest', function (req, res) {
-    if(debug == true){
+    if (debug == true) {
         console.log(req.body);
     }
     // Set our internal DB variable
@@ -162,11 +162,12 @@ router.post('/icecreamrequest', function (req, res) {
     // Set our collection
     var unhandled_collection = db.get('unhandled_users');
     var userlist_collection = db.get('userlist');
+    var inprogress_collection = db.get('in_progress');
 
     userlist_collection.find({
         "Email": email
     }, {}, function (e, docs) {
-        if(docs != ""){
+        if (docs != "") {
             username = docs[0].Username;
         }
     });
@@ -180,27 +181,36 @@ router.post('/icecreamrequest', function (req, res) {
             res.send("You allready send a request");
         } else // Submit to the DB
         {
-            res.send("Your request is being handled!");
-            unhandled_collection.insert({
-                "Username": username,
-                "Email": email,
-                "Longitude": userlong,
-                "Latitude": userlat
-            }, function (err, doc) {
-                if (err) {
-                    res.send("There was a problem adding the information to the database.");
+            inprogress_collection.find({
+                "Email": email
+            }, {}, function (e, docs) {
+                if (docs != "") {
+                    res.send("Your rewquest is allready handled");
+                } else {
+                    res.send("Your request is being handled!");
+                    unhandled_collection.insert({
+                        "Username": username,
+                        "Email": email,
+                        "Longitude": userlong,
+                        "Latitude": userlat
+                    }, function (err, doc) {
+                        if (err) {
+                            res.send("There was a problem adding the information to the database.");
+                        }
+                    });
                 }
             });
+
         }
     });
 });
 router.post('/helpclient', function (req, res) {
-    if(debug == true){
+    if (debug == true) {
         console.log(req.body);
     }
     // Set our internal DB variable
     var db = req.db;
-    
+
     // Set variables
     var driveremail = req.body.driveremail;
     var driverLoc = req.body.driverLat + "," + req.body.driverLong;
@@ -272,9 +282,9 @@ router.post('/helpclient', function (req, res) {
                 else {
                     var json = [];
                     var obj = JSON.parse(body);
-                     //body die ik binnenkrijg omzetten naar JSON
+                    //body die ik binnenkrijg omzetten naar JSON
                     //if(obj.routes[0].waypoint_order != ""){
-                       volgorde = obj.routes[0].waypoint_order; //in de google responds zit een waypoint_order, deze geeft weer welke klant op welke plek in het rijtje staat. 
+                    volgorde = obj.routes[0].waypoint_order; //in de google responds zit een waypoint_order, deze geeft weer welke klant op welke plek in het rijtje staat. 
                     //}
                     legs = obj.routes[0].legs;
                     legs_length = obj.routes[0].legs.length;
@@ -366,7 +376,7 @@ router.post('/helpclient', function (req, res) {
 });
 router.post('/doneclient', function (req, res) {
     console.log(req.body);
-    if(debug == true){
+    if (debug == true) {
         console.log(req.body);
     }
     // Set our internal DB variable
@@ -379,8 +389,8 @@ router.post('/doneclient', function (req, res) {
     var userLong = [];
     var userLat = [];
     var eta = [];
-    var user_volgorde = []; 
-    var totaal=0;
+    var user_volgorde = [];
+    var totaal = 0;
 
     // Set our collections
     var inprogress_collection = db.get('in_progress');
@@ -395,13 +405,13 @@ router.post('/doneclient', function (req, res) {
         inprogress_collection.find({
             "DriverEmail": driveremail
         }, {}, function (e, docs) {
-            if(docs == ""){
+            if (docs == "") {
                 res.send("Er zijn geen klanten meer")
-            }else{
+            } else {
                 var DestIndex;
                 var locs = [];
                 var locClients = [];
-                
+
                 for (i = 0; i < docs.length; i++) {
                     useremail.push(docs[i].Email);
                     userLong.push(docs[i].Longitude);
@@ -492,9 +502,9 @@ router.post('/doneclient', function (req, res) {
             }
         });
     }
-    
+
     setTimeout(myFunction, 2000); //myFunction met een delay aanroepen omdat problemen ontstaan met de database 
-    
+
     function determineFarthest(locClients, longD, latD) { //functie die berekent welke geaccepteerde gebruiker er het verste van de driver is
         var farthest = 0;
         var index = 0;
@@ -522,7 +532,7 @@ router.post('/doneclient', function (req, res) {
     }
 });
 router.post('/checkpassword', function (req, res) {
-    if(debug == true){
+    if (debug == true) {
         console.log(req.body);
     }
     // Set our internal DB variable
@@ -547,7 +557,7 @@ router.post('/checkpassword', function (req, res) {
     });
 });
 router.post('/geteta', function (req, res) {
-    if(debug == true){
+    if (debug == true) {
         console.log(req.body);
     }
     // Set our internal DB variable
@@ -580,7 +590,7 @@ router.post('/geteta', function (req, res) {
     });
 });
 router.post('/getcredentials', function (req, res) {
-    if(debug == true){
+    if (debug == true) {
         console.log(req.body);
     }
     // Set our internal DB variable
@@ -607,7 +617,7 @@ router.post('/getcredentials', function (req, res) {
         }
     });
 });
-router.post('/driverlogin',function(req,res){
+router.post('/driverlogin', function (req, res) {
     // Set our internal DB variable
     var db = req.db;
 

@@ -3,7 +3,7 @@ var request = require("request");
 var polyline = require("polyline");
 var validator = require('validator');
 var router = express.Router();
-var debug = false;
+var debug = true;
 // Als ik een *+bericht stuur wordt de client treads beëindigd
 
 //POSTCOMMANDS
@@ -98,7 +98,7 @@ router.post('/updatecredentials', function (req, res) {
             "Zipcode": zipcode
         }
     });
-    res.send("Credentials aangepast");
+    res.send("1Credentials aangepast");
 });
 router.post('/adddriver', function (req, res) {
     if(debug == true){
@@ -108,36 +108,43 @@ router.post('/adddriver', function (req, res) {
     var db = req.db;
 
     // Set variables
-    var name = req.body.name;
-    var lastname = req.body.lastname;
-    var email = req.body.email;
-    var phone = req.body.phone;
-    var password = req.body.password;
-    var city = req.body.city;
+    var username = req.body.drivername;
+    var email = req.body.driveremail;
+    var password = req.body.driverpassword;
+
 
     // Set our collection
-    var unhandled_collection = db.get('unhandled_users');
-    var inprogress_collection = db.get('in_progress');
-    var userlist_collection = db.get('userlist');
     var driverlist_collection = db.get('driverlist');
 
     // Submit to the DB
-    driverlist_collection.insert({
-        "Name": name,
-        "Lastname": lastname,
-        "Email": email,
-        "Password": password,
-        "Phone": phone,
-        "City": city
-    }, function (err, doc) {
-        if (err) {
-            // If it failed, return error
-            res.send("There was a problem adding the information to the database.");
-        } else {
-            // And forward to success page
-            res.redirect("userlist");
+    
+    driverlist_collection.find({
+        "DriverName": username,
+        "DriverEmail": email,
+    }, function (err, docs) {
+        if (validator.isEmail(email) == false) {
+            console.log("Email not valid");
+            res.send("0Email not valid");
+        } else // Check if email allready exist
+        if (docs != "") {
+            console.log("This email already exists");
+            res.send("0This email already exists");
+        } else // Submit to the DB
+        {
+            driverlist_collection.insert({
+                "DriverName": username,
+                "DriverEmail": email,
+                "DriverPassword": password
+            }, function (err, doc) {
+                if (err) {
+                    res.send("0There was a problem adding the information to the database.");
+                }
+            });
+            res.send("1Account created");
         }
     });
+
+
 });
 router.post('/icecreamrequest', function (req, res) {
     if(debug == true){
@@ -148,28 +155,32 @@ router.post('/icecreamrequest', function (req, res) {
 
     // Set variables
     var email = req.body.email;
-    var username = req.body.username;
     var userlong = req.body.userLong;
     var userlat = req.body.userLat;
+    var username = req.body.username;
 
     // Set our collection
     var unhandled_collection = db.get('unhandled_users');
     var userlist_collection = db.get('userlist');
+
     userlist_collection.find({
         "Email": email
     }, {}, function (e, docs) {
-        console.log(docs);
+        if(docs != ""){
+            username = docs[0].Username;
+        }
     });
+
     //Find user by email
     unhandled_collection.find({
         "Email": email
     }, {}, function (e, docs) {
         if (docs != "") {
             console.log("You allready send a request");
-            res.send("0You allready send a request");
+            res.send("You allready send a request");
         } else // Submit to the DB
         {
-            res.send("1Your request is being handled!");
+            res.send("Your request is being handled!");
             unhandled_collection.insert({
                 "Username": username,
                 "Email": email,
@@ -260,8 +271,11 @@ router.post('/helpclient', function (req, res) {
                 if (error) console.log(error);
                 else {
                     var json = [];
-                    var obj = JSON.parse(body); //body die ik binnenkrijg omzetten naar JSON
-                    volgorde = obj.routes[0].waypoint_order; //in de google responds zit een waypoint_order, deze geeft weer welke klant op welke plek in het rijtje staat.
+                    var obj = JSON.parse(body);
+                     //body die ik binnenkrijg omzetten naar JSON
+                    //if(obj.routes[0].waypoint_order != ""){
+                       volgorde = obj.routes[0].waypoint_order; //in de google responds zit een waypoint_order, deze geeft weer welke klant op welke plek in het rijtje staat. 
+                    //}
                     legs = obj.routes[0].legs;
                     legs_length = obj.routes[0].legs.length;
                     for (i = 0; i < legs_length; i++) {
@@ -593,6 +607,28 @@ router.post('/getcredentials', function (req, res) {
         }
     });
 });
+router.post('/driverlogin',function(req,res){
+    // Set our internal DB variable
+    var db = req.db;
+
+    // Set variables
+    var email = req.body.driveremail;
+    var password = req.body.driverpassword;
+
+    // Set our collections
+    var driverlist_collection = db.get('driverlist');
+
+    driverlist_collection.find({
+        "Email": email,
+        "Password": password
+    }, {}, function (e, docs) {
+        if (docs != "") {
+            res.send("1Valid");
+        } else {
+            res.send("0Invalid");
+        }
+    });
+})
 
 // GETCOMMANDS
 router.get('/userlist', function (req, res) {
@@ -603,6 +639,17 @@ router.get('/userlist', function (req, res) {
     var userlist_collection = db.get('userlist');
 
     userlist_collection.find({}, {}, function (e, docs) {
+        res.json(docs);
+    });
+});
+router.get('/driverlist', function (req, res) {
+    // Set our internal DB variable
+    var db = req.db;
+
+    // Set our collection
+    var driverlist_collection = db.get('driverlist');
+
+    driverlist_collection.find({}, {}, function (e, docs) {
         res.json(docs);
     });
 });
@@ -684,6 +731,7 @@ router.get('/showall', function (req, res) {
         data.push(docs);
     });
     res.send(data);
+
 });
 
 module.exports = router;

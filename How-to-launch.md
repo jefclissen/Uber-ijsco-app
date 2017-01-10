@@ -38,3 +38,11 @@ Deze stappen moet je volgen na het opstarten van de app:
 5. om een klanten te behandelen druk je op de marker, nu zal er meer informatie over de klant tevoorschijn komen. Druk daarna op de label en een activity zal openen waar meer informatie over de klant tevoorschijn zal komen. Hier is een knop voorzien om een klant te behandelen. Na het drukken van deze knop zal je terug naar de map gaan.
 6. om een nieuwe klant te behandelen druk je op de marker, nu zal er meer informatie over de klant tevoorschijn komen. Druk daarna op de label en de accepteer activity zal openen. hier kan je de klant(en) aanduiden die je wil behandelen.
 
+##Client App
+Code van de werkende Client app bevind zich sourcecode/Uber Client. (deliverer-app is een mislukte versie)
+
+Om de app te gebruiken/testen hebben je een account nodig, dit kan ja aanmaken door op de Sign Up knop te klikken. Vervolgens druk je  op de Sign in knop om verder te gaan.
+Om een Ijsjecokar te bestellen druk je op het logo in de App, dit zal een request sturen naar de Server.
+Wanneer een driver uw request heeft geaccepteerd zal je een melding krijgen. Als de Ijscokar minder dan een minuut van uw verwijderd is krijgt uw een notificatie.
+Tenslotte is het mogelijk het account aan te passen en verschillende gegevens in te vullen door op 'account' te drukken en vervolgens 'Change account'
+
